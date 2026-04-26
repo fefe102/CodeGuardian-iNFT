@@ -14,85 +14,31 @@
     "NEXT_PUBLIC_POI_PASSPORT_ID": "0x01212ca92791787ccb99c454d3b59c5596f90882c892c7fca3e63294a159430c",
     "NEXT_PUBLIC_POI_CERTIFICATE_ID": "1"
   },
-  "sensitiveEnvPresence": [
-    {
-      "key": "POI_ADMIN_TOKEN",
-      "configured": false
-    },
-    {
-      "key": "0G_PRIVATE_KEY",
-      "configured": true
-    },
-    {
-      "key": "ZERO_G_PRIVATE_KEY",
-      "configured": false
-    },
-    {
-      "key": "0G_WALLET_ADDRESS",
-      "configured": false
-    },
-    {
-      "key": "ZERO_G_WALLET_ADDRESS",
-      "configured": false
-    },
-    {
-      "key": "0G_RPC_URL",
-      "configured": true
-    },
-    {
-      "key": "ZERO_G_RPC_URL",
-      "configured": false
-    },
-    {
-      "key": "0G_STORAGE_INDEXER_RPC",
-      "configured": true
-    },
-    {
-      "key": "ZERO_G_STORAGE_INDEXER_RPC",
-      "configured": false
-    },
-    {
-      "key": "0G_COMPUTE_BEARER_TOKEN",
-      "configured": true
-    },
-    {
-      "key": "ZERO_G_COMPUTE_BEARER_TOKEN",
-      "configured": false
-    },
-    {
-      "key": "0G_COMPUTE_PROVIDER",
-      "configured": true
-    },
-    {
-      "key": "ZERO_G_COMPUTE_PROVIDER",
-      "configured": false
-    },
-    {
-      "key": "0G_COMPUTE_MODEL",
-      "configured": true
-    },
-    {
-      "key": "ZERO_G_COMPUTE_MODEL",
-      "configured": false
-    },
-    {
-      "key": "0G_COMPUTE_SERVICE_URL",
-      "configured": false
-    },
-    {
-      "key": "ZERO_G_COMPUTE_SERVICE_URL",
-      "configured": false
-    },
-    {
-      "key": "POI_DEMO_ENCRYPTION_KEY",
-      "configured": false
-    }
+  "serverOnlyEnvNames": [
+    "POI_ADMIN_TOKEN",
+    "0G_PRIVATE_KEY",
+    "ZERO_G_PRIVATE_KEY",
+    "0G_WALLET_ADDRESS",
+    "ZERO_G_WALLET_ADDRESS",
+    "0G_RPC_URL",
+    "ZERO_G_RPC_URL",
+    "0G_STORAGE_INDEXER_RPC",
+    "ZERO_G_STORAGE_INDEXER_RPC",
+    "0G_COMPUTE_BEARER_TOKEN",
+    "ZERO_G_COMPUTE_BEARER_TOKEN",
+    "0G_COMPUTE_PROVIDER",
+    "ZERO_G_COMPUTE_PROVIDER",
+    "0G_COMPUTE_MODEL",
+    "ZERO_G_COMPUTE_MODEL",
+    "0G_COMPUTE_SERVICE_URL",
+    "ZERO_G_COMPUTE_SERVICE_URL",
+    "POI_DEMO_ENCRYPTION_KEY"
   ],
   "commands": [
     "vercel link --project proof-of-intelligence-explorer",
     "vercel env add NEXT_PUBLIC_APP_NAME production",
     "vercel env add POI_ADMIN_TOKEN production --sensitive",
-    "vercel --prod"
+    "pnpm dlx vercel@52.0.0 --prod"
   ],
-  "note": "This plan intentionally records only public values and secret presence booleans."
+  "note": "This plan intentionally records public values and server-only env names only. It does not record secret values or whether local secrets are configured."
 }

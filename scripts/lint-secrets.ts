@@ -8,7 +8,11 @@ const tracked = execFileSync("git", ["ls-files", "-z"], { encoding: "utf8" })
 const forbiddenTracked = new Set([".env", ".env.local", ".env.production"]);
 const sensitiveAssignment =
   /(?:PRIVATE_KEY|MNEMONIC|BEARER_TOKEN|API_KEY|ADMIN_TOKEN|ENCRYPTION_KEY|SECRET)\s*=\s*["']?[^"'\n]+["']?/i;
-const publicExposurePattern = /NEXT_PUBLIC_[A-Z0-9_]*(?:PRIVATE|TOKEN|SECRET|MNEMONIC|ENCRYPTION|KEY)[A-Z0-9_]*/;
+const publicExposurePattern =
+  /NEXT_PUBLIC_[A-Z0-9_]*(?:PRIVATE|TOKEN|SECRET|MNEMONIC|ENCRYPTION|KEY)[A-Z0-9_]*/;
+const personalEmailPattern = /\b[A-Z0-9._%+-]+@gmail\.com\b/i;
+const configuredSecretPresencePattern =
+  /"(?:PRIVATE_KEY|MNEMONIC|BEARER_TOKEN|API_KEY|ADMIN_TOKEN|ENCRYPTION_KEY|SECRET)[A-Z0-9_]*"[\s\S]{0,80}"configured"\s*:\s*true/i;
 
 const failures: string[] = [];
 
@@ -23,20 +27,35 @@ for (const file of tracked) {
   }
 
   const contents = readFileSync(file, "utf8");
+  if (personalEmailPattern.test(contents)) {
+    failures.push(`${file} appears to contain a personal Gmail address`);
+  }
+
   if (publicExposurePattern.test(contents)) {
     failures.push(`${file} references a sensitive NEXT_PUBLIC_* name`);
   }
 
+  if (configuredSecretPresencePattern.test(contents)) {
+    failures.push(`${file} records local secret presence metadata`);
+  }
+
   if (file !== ".env.example" && sensitiveAssignment.test(contents)) {
-    failures.push(`${file} appears to contain a non-empty sensitive assignment`);
+    failures.push(
+      `${file} appears to contain a non-empty sensitive assignment`,
+    );
   }
 
   if (file === ".env.example") {
     const unsafeExampleLines = contents
       .split("\n")
-      .filter((line) => sensitiveAssignment.test(line) && !line.trim().endsWith('=""'));
+      .filter(
+        (line) =>
+          sensitiveAssignment.test(line) && !line.trim().endsWith('=""'),
+      );
     for (const line of unsafeExampleLines) {
-      failures.push(`.env.example must keep sensitive placeholders empty: ${line.split("=")[0]}`);
+      failures.push(
+        `.env.example must keep sensitive placeholders empty: ${line.split("=")[0]}`,
+      );
     }
   }
 }

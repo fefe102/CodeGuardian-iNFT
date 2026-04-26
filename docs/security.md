@@ -2,6 +2,8 @@
 
 The repository is public. Treat every tracked file as public.
 
+The latest audit is recorded in [SECURITY_AUDIT.md](../SECURITY_AUDIT.md).
+
 ## Never Commit
 
 - `.env`, `.env.local`, `.env.production`
@@ -56,6 +58,7 @@ Before committing:
 ```bash
 git status --short
 pnpm lint
+pnpm audit:prod
 rg -n "PRIVATE_KEY|MNEMONIC|BEARER_TOKEN|API_KEY|ADMIN_TOKEN|ENCRYPTION_KEY|SECRET" README.md SUBMISSION.md DEMO.md DEPLOYMENT.md docs public/demo
 ```
 

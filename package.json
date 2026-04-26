@@ -20,7 +20,8 @@
     "contracts:deploy:live": "tsx scripts/deploy-live.ts",
     "demo:live:seed": "tsx scripts/seed-live-demo.ts",
     "demo:live:run-agent": "tsx scripts/run-live-codeguardian.ts",
-    "vercel:deploy": "vercel --prod",
+    "vercel:deploy": "pnpm dlx vercel@52.0.0 --prod",
+    "audit:prod": "pnpm audit --prod --audit-level moderate",
     "final:check": "pnpm lint && pnpm typecheck && pnpm test && pnpm build && pnpm demo:verify && pnpm demo:run-agent && pnpm demo:replay && pnpm demo:export-proof"
   },
   "devDependencies": {
@@ -28,7 +29,6 @@
     "@types/node": "^22.15.3",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
-    "@vitejs/plugin-react": "^4.3.4",
     "autoprefixer": "^10.4.20",
     "hardhat": "^2.22.19",
     "next": "^15.5.15",
@@ -40,7 +40,6 @@
     "tsx": "^4.19.2",
     "turbo": "^2.3.4",
     "typescript": "^5.8.3",
-    "vercel": "^52.0.0",
     "vitest": "^2.1.8"
   },
   "dependencies": {
@@ -48,5 +47,10 @@
     "@poi/agent-runtime": "workspace:*",
     "@poi/sdk": "workspace:*",
     "viem": "^2.22.17"
+  },
+  "pnpm": {
+    "overrides": {
+      "postcss": "8.5.10"
+    }
   }
 }

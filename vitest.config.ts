@@ -1,21 +1,31 @@
 import { defineConfig } from "vitest/config";
-import react from "@vitejs/plugin-react";
 
 export default defineConfig({
-  plugins: [react()],
+  esbuild: {
+    jsx: "automatic",
+    jsxImportSource: "react"
+  },
   test: {
     environment: "node",
-    include: ["packages/**/*.test.ts", "packages/**/*.test.tsx", "apps/**/*.test.ts", "apps/**/*.test.tsx"],
+    include: [
+      "packages/**/*.test.ts",
+      "packages/**/*.test.tsx",
+      "apps/**/*.test.ts",
+      "apps/**/*.test.tsx",
+    ],
     coverage: {
       provider: "v8",
-      reporter: ["text", "json-summary"]
-    }
+      reporter: ["text", "json-summary"],
+    },
   },
   resolve: {
     alias: {
-      "@poi/sdk": "<workspace>/packages/sdk/src/index.ts",
-      "@poi/agent-runtime": "<workspace>/packages/agent-runtime/src/index.ts",
-      "@poi/ui": "<workspace>/packages/ui/src/index.ts"
-    }
-  }
+      "@poi/sdk":
+        "<workspace>/packages/sdk/src/index.ts",
+      "@poi/agent-runtime":
+        "<workspace>/packages/agent-runtime/src/index.ts",
+      "@poi/ui":
+        "<workspace>/packages/ui/src/index.ts",
+    },
+  },
 });

@@ -145,7 +145,7 @@ If the Vercel project is on a Hobby/team setup that rejects deployments based on
 mkdir -p /tmp/poi-vercel-source-clean/.vercel
 rsync -a --exclude='.git' --exclude='.vercel' --exclude='.env' --exclude='.env.*' --exclude='node_modules' --exclude='.pnpm-store' --exclude='.next' --exclude='dist' --exclude='build' --exclude='coverage' --exclude='.turbo' --exclude='artifacts' --exclude='cache' --exclude='tmp' --exclude='temp' ./ /tmp/poi-vercel-source-clean/
 rsync -a .vercel/project.json /tmp/poi-vercel-source-clean/.vercel/project.json
-pnpm exec vercel deploy --cwd /tmp/poi-vercel-source-clean --prod --yes
+pnpm dlx vercel@52.0.0 deploy --cwd /tmp/poi-vercel-source-clean --prod --yes
 ```
 
 After deployment:
