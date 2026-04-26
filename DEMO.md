@@ -37,9 +37,10 @@ pnpm demo:export-proof
 ## Live Demo Notes
 
 - Public pages work without admin access.
+- The hosted demo is seeded on 0G Galileo with Demo iNFT `0xa390c79f21a3b4f62f4797308f50f8ff9ea4f4c9`, registry `0x90d7f68cbf2a860f7b2c54548095fcb72d61b9af`, CodeGuardian token `1`, and FakeAgent token `2`.
 - Admin actions are hidden or disabled unless live writes and `POI_ADMIN_TOKEN` are configured.
 - Live writes spend only 0G Galileo testnet funds and must preflight chain ID, wallet address, and balance.
-- Hybrid/mock evidence is labeled honestly when a live 0G component is unavailable.
+- The public UI labels live chain evidence separately from hybrid storage/compute evidence when a live 0G component is unavailable.
 
 ## Fallback
 

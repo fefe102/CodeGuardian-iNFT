@@ -31,6 +31,11 @@ Public browser-display values:
 - `NEXT_PUBLIC_0G_RPC_URL`
 - `NEXT_PUBLIC_POI_REGISTRY_ADDRESS`
 - `NEXT_PUBLIC_POI_DEMO_INFT_ADDRESS`
+- `NEXT_PUBLIC_POI_DEMO_OWNER`
+- `NEXT_PUBLIC_CODEGUARDIAN_INFT_ID`
+- `NEXT_PUBLIC_FAKEAGENT_INFT_ID`
+- `NEXT_PUBLIC_POI_PASSPORT_ID`
+- `NEXT_PUBLIC_POI_CERTIFICATE_ID`
 
 Server-only values:
 
@@ -94,6 +99,11 @@ vercel env add NEXT_PUBLIC_0G_CHAIN_ID production
 vercel env add NEXT_PUBLIC_0G_RPC_URL production
 vercel env add NEXT_PUBLIC_POI_REGISTRY_ADDRESS production
 vercel env add NEXT_PUBLIC_POI_DEMO_INFT_ADDRESS production
+vercel env add NEXT_PUBLIC_POI_DEMO_OWNER production
+vercel env add NEXT_PUBLIC_CODEGUARDIAN_INFT_ID production
+vercel env add NEXT_PUBLIC_FAKEAGENT_INFT_ID production
+vercel env add NEXT_PUBLIC_POI_PASSPORT_ID production
+vercel env add NEXT_PUBLIC_POI_CERTIFICATE_ID production
 ```
 
 Set server-only values through Vercel sensitive env workflows or stdin/temp-file methods that do not print values. Delete any temp files immediately after use.
@@ -163,6 +173,17 @@ Then add the production URL and safe deployment metadata to the docs.
 Production deployment is live at:
 
 https://proof-of-intelligence-explorer.vercel.app
+
+Live 0G Galileo evidence currently seeded for the hosted demo:
+
+- Demo iNFT: `0xa390c79f21a3b4f62f4797308f50f8ff9ea4f4c9`
+- Proof registry: `0x90d7f68cbf2a860f7b2c54548095fcb72d61b9af`
+- CodeGuardian token ID: `1`
+- FakeAgent token ID: `2`
+- CodeGuardian passport: `0x01212ca92791787ccb99c454d3b59c5596f90882c892c7fca3e63294a159430c`
+- Registry certificate record: `1`
+
+The hosted product is intentionally configured as public read-only: live writes are disabled in production, and no private key or admin token is exposed to browser code.
 
 The successful deployment used a `.git`-less source copy so Vercel did not attach GitHub author metadata to the deploy. Public verification was checked with:
 

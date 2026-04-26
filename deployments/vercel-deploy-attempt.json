@@ -1,6 +1,6 @@
 {
   "project": "proof-of-intelligence-explorer",
-  "attemptedAt": "2026-04-26T11:23:03.000Z",
+  "attemptedAt": "2026-04-26T12:43:53.000Z",
   "status": "ready",
   "url": "https://proof-of-intelligence-explorer.vercel.app",
   "deployMode": "gitless-source-copy",
@@ -8,7 +8,12 @@
   "safeToCommit": true,
   "publicChecks": [
     "GET /api/health returned ok",
-    "GET /api/verify?agent=codeguardian returned tier 6",
-    "GET /api/verify?agent=fakeagent returned tier 1"
+    "GET /api/verify?agent=codeguardian returned tier 6 with sources live,hybrid",
+    "GET /api/verify?agent=fakeagent returned tier 1 with live token evidence",
+    "GET /agent/codeguardian returned 200",
+    "GET /agent/fakeagent returned 200",
+    "GET /run/codeguardian-run-001 returned 200",
+    "GET /certificate/poi-cert-codeguardian-001 returned 200",
+    "POST /api/admin/seed-demo without token returned 403"
   ]
 }

@@ -6,6 +6,17 @@ The product combines an explorer, SDK, CLI, registry, demo agent, and printable 
 
 Hosted demo: https://proof-of-intelligence-explorer.vercel.app
 
+Current live Galileo demo:
+
+- Demo iNFT: `0xa390c79f21a3b4f62f4797308f50f8ff9ea4f4c9`
+- Proof registry: `0x90d7f68cbf2a860f7b2c54548095fcb72d61b9af`
+- CodeGuardian token ID: `1`
+- FakeAgent token ID: `2`
+- CodeGuardian passport: `0x01212ca92791787ccb99c454d3b59c5596f90882c892c7fca3e63294a159430c`
+- On-chain certificate record: `1`
+
+The hosted product uses live 0G Chain evidence with hybrid storage/compute evidence unless those services are configured server-side. The UI labels that split explicitly.
+
 ## Why This Exists
 
 Many "AI NFTs" prove ownership of a token and maybe point to metadata. They do not prove that an agent has:
@@ -125,6 +136,11 @@ vercel env add NEXT_PUBLIC_0G_CHAIN_ID production
 vercel env add NEXT_PUBLIC_0G_RPC_URL production
 vercel env add NEXT_PUBLIC_POI_REGISTRY_ADDRESS production
 vercel env add NEXT_PUBLIC_POI_DEMO_INFT_ADDRESS production
+vercel env add NEXT_PUBLIC_POI_DEMO_OWNER production
+vercel env add NEXT_PUBLIC_CODEGUARDIAN_INFT_ID production
+vercel env add NEXT_PUBLIC_FAKEAGENT_INFT_ID production
+vercel env add NEXT_PUBLIC_POI_PASSPORT_ID production
+vercel env add NEXT_PUBLIC_POI_CERTIFICATE_ID production
 vercel --prod
 ```
 
@@ -174,6 +190,8 @@ The contract slice is intentionally small:
 - certificate records: issued directly by the registry to keep the hackathon demo minimal and reliable.
 
 Contract checks cover minting, passport registration, root updates, certificate issuance, unauthorized update rejection, and public reads.
+
+Live Galileo contract metadata is recorded in [deployments/0g-galileo.json](deployments/0g-galileo.json). The public deployment is read-only by default; hosted live write actions remain disabled unless server-only admin and wallet secrets are configured.
 
 ## Architecture
 

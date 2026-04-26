@@ -18,6 +18,15 @@ The public UI must show the mode for each evidence source.
 - root updates
 - certificate issuance
 
+Current live Galileo seed:
+
+- Demo iNFT: `0xa390c79f21a3b4f62f4797308f50f8ff9ea4f4c9`
+- Proof registry: `0x90d7f68cbf2a860f7b2c54548095fcb72d61b9af`
+- CodeGuardian token ID: `1`
+- FakeAgent token ID: `2`
+- CodeGuardian passport: `0x01212ca92791787ccb99c454d3b59c5596f90882c892c7fca3e63294a159430c`
+- Registry certificate record: `1`
+
 Guardrails:
 
 - expected chain ID is `16602` for Galileo testnet
@@ -95,6 +104,11 @@ Public display vars:
 - `NEXT_PUBLIC_0G_RPC_URL`
 - `NEXT_PUBLIC_POI_REGISTRY_ADDRESS`
 - `NEXT_PUBLIC_POI_DEMO_INFT_ADDRESS`
+- `NEXT_PUBLIC_POI_DEMO_OWNER`
+- `NEXT_PUBLIC_CODEGUARDIAN_INFT_ID`
+- `NEXT_PUBLIC_FAKEAGENT_INFT_ID`
+- `NEXT_PUBLIC_POI_PASSPORT_ID`
+- `NEXT_PUBLIC_POI_CERTIFICATE_ID`
 
 ## Troubleshooting
 
