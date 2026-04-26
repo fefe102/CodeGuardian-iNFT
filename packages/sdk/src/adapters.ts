@@ -1,0 +1,270 @@
+import { createPublicClient, getContract, http, type Address, type PublicClient } from "viem";
+import { defineChain } from "viem";
+import codeguardianCertificate from "../fixtures/codeguardian.certificate.json";
+import codeguardianComputeRuns from "../fixtures/codeguardian.compute-runs.json";
+import codeguardianBundle from "../fixtures/codeguardian.intelligence.encrypted.json";
+import codeguardianManifest from "../fixtures/codeguardian.manifest.json";
+import codeguardianMemory from "../fixtures/codeguardian.memory.json";
+import codeguardianRun from "../fixtures/codeguardian.run.json";
+import fakeagentMetadata from "../fixtures/fakeagent.metadata.json";
+import { hashCanonicalJson } from "./canonical";
+import type { Certificate, ComputeRuns, IntelligenceBundle, Manifest, MemoryState, RunTrace } from "./schema";
+
+export type EvidenceSource = "live" | "hybrid" | "mock";
+
+export type TokenSnapshot = {
+  chainId: number;
+  contract: string;
+  tokenId: string;
+  owner?: string;
+  standard?: string;
+  metadataUri?: string;
+  manifestRoot?: string;
+  source: EvidenceSource;
+};
+
+export interface ChainAdapter {
+  source: EvidenceSource;
+  getToken(contract: string, tokenId: string): Promise<TokenSnapshot | null>;
+}
+
+export interface StorageAdapter {
+  source: EvidenceSource;
+  getManifestByAlias(alias: string): Promise<Manifest | null>;
+  getManifestByRoot(root: string): Promise<Manifest | null>;
+  getJsonByRoot<T>(root: string): Promise<T | null>;
+  getCertificateById?(certificateId: string): Promise<Certificate | null>;
+}
+
+export interface ComputeAdapter {
+  source: EvidenceSource;
+  getRuns(runIds: string[]): Promise<ComputeRuns | null>;
+}
+
+export interface DAAdapter {
+  source: EvidenceSource;
+  exportBundle(input: { agent: string; roots: string[] }): Promise<DaBundle>;
+}
+
+export interface EnsAdapter {
+  source: EvidenceSource;
+  resolveName(name: string): Promise<{ contract: string; tokenId: string } | null>;
+}
+
+export type DaBundle = {
+  schema: "poi-da-bundle/v0.1";
+  agent: string;
+  roots: string[];
+  bundleRoot: string;
+  source: EvidenceSource;
+};
+
+const manifestFixture = codeguardianManifest as Manifest;
+const bundleFixture = codeguardianBundle as IntelligenceBundle;
+const memoryFixture = codeguardianMemory as MemoryState;
+const runFixture = codeguardianRun as RunTrace;
+const computeFixture = codeguardianComputeRuns as ComputeRuns;
+const certificateFixture = codeguardianCertificate as Certificate;
+
+export const demoContracts = {
+  chainId: 16602,
+  codeguardian: "0x1111111111111111111111111111111111117857",
+  fakeagent: "0x2222222222222222222222222222222222227857",
+  owner: "0x053b860f329c9e4549d23dc8aadf1116b99f1233"
+} as const;
+
+function rootMap(): Map<string, unknown> {
+  return new Map<string, unknown>([
+    [manifestFixture.storage.manifestRoot, manifestFixture],
+    [manifestFixture.storage.intelligenceBundleRoot, bundleFixture],
+    [manifestFixture.storage.memoryRoot, memoryFixture],
+    [manifestFixture.storage.latestRunRoot, runFixture],
+    [manifestFixture.memory.checkpointRoot, memoryFixture.checkpoint],
+    [manifestFixture.memory.historyRoot, memoryFixture.history],
+    [hashCanonicalJson(computeFixture), computeFixture],
+    [hashCanonicalJson(certificateFixture), certificateFixture]
+  ]);
+}
+
+export class MockChainAdapter implements ChainAdapter {
+  readonly source: EvidenceSource = "mock";
+
+  async getToken(contract: string, tokenId: string): Promise<TokenSnapshot | null> {
+    const normalized = contract.toLowerCase();
+
+    if (normalized === demoContracts.codeguardian.toLowerCase() && tokenId === "1") {
+      return {
+        chainId: demoContracts.chainId,
+        contract: demoContracts.codeguardian,
+        tokenId,
+        owner: demoContracts.owner,
+        standard: "ERC-7857-like",
+        metadataUri: "mock://codeguardian",
+        manifestRoot: manifestFixture.storage.manifestRoot,
+        source: this.source
+      };
+    }
+
+    if (normalized === demoContracts.fakeagent.toLowerCase() && tokenId === "2") {
+      return {
+        chainId: demoContracts.chainId,
+        contract: demoContracts.fakeagent,
+        tokenId,
+        owner: demoContracts.owner,
+        standard: "ERC-721 metadata-only",
+        metadataUri: (fakeagentMetadata as { image: string }).image,
+        source: this.source
+      };
+    }
+
+    return null;
+  }
+}
+
+export class MockStorageAdapter implements StorageAdapter {
+  readonly source: EvidenceSource = "mock";
+
+  async getManifestByAlias(alias: string): Promise<Manifest | null> {
+    if (alias.toLowerCase() === "codeguardian") {
+      return manifestFixture;
+    }
+    return null;
+  }
+
+  async getManifestByRoot(root: string): Promise<Manifest | null> {
+    const value = rootMap().get(root);
+    return value === manifestFixture ? manifestFixture : null;
+  }
+
+  async getJsonByRoot<T>(root: string): Promise<T | null> {
+    return (rootMap().get(root) as T | undefined) ?? null;
+  }
+
+  async getCertificateById(certificateId: string): Promise<Certificate | null> {
+    if (certificateFixture.certificateId === certificateId) {
+      return certificateFixture;
+    }
+    return null;
+  }
+}
+
+export class MockComputeAdapter implements ComputeAdapter {
+  readonly source: EvidenceSource = "mock";
+
+  async getRuns(runIds: string[]): Promise<ComputeRuns | null> {
+    const matches = computeFixture.runs.filter((run) => runIds.includes(run.id));
+    if (matches.length === 0) {
+      return null;
+    }
+    return { ...computeFixture, runs: matches };
+  }
+}
+
+export class MockDAAdapter implements DAAdapter {
+  readonly source: EvidenceSource = "mock";
+
+  async exportBundle(input: { agent: string; roots: string[] }): Promise<DaBundle> {
+    return {
+      schema: "poi-da-bundle/v0.1",
+      agent: input.agent,
+      roots: input.roots,
+      bundleRoot: hashCanonicalJson({ agent: input.agent, roots: input.roots }),
+      source: this.source
+    };
+  }
+}
+
+export class MockEnsAdapter implements EnsAdapter {
+  readonly source: EvidenceSource = "mock";
+
+  async resolveName(name: string): Promise<{ contract: string; tokenId: string } | null> {
+    if (name === "codeguardian.poi-demo.eth") {
+      return { contract: demoContracts.codeguardian, tokenId: "1" };
+    }
+    return null;
+  }
+}
+
+const galileo = defineChain({
+  id: 16602,
+  name: "0G Galileo",
+  nativeCurrency: { decimals: 18, name: "0G", symbol: "0G" },
+  rpcUrls: {
+    default: { http: ["https://evmrpc-testnet.0g.ai"] }
+  }
+});
+
+const erc721ReadAbi = [
+  {
+    type: "function",
+    name: "ownerOf",
+    stateMutability: "view",
+    inputs: [{ name: "tokenId", type: "uint256" }],
+    outputs: [{ name: "owner", type: "address" }]
+  },
+  {
+    type: "function",
+    name: "tokenURI",
+    stateMutability: "view",
+    inputs: [{ name: "tokenId", type: "uint256" }],
+    outputs: [{ name: "uri", type: "string" }]
+  }
+] as const;
+
+export class ZeroGChainAdapter implements ChainAdapter {
+  readonly source = "live" as const;
+  private readonly client: PublicClient;
+  private readonly chainId: number;
+
+  constructor(options: { rpcUrl?: string; chainId?: number } = {}) {
+    this.chainId = options.chainId ?? 16602;
+    this.client = createPublicClient({
+      chain: { ...galileo, id: this.chainId },
+      transport: http(options.rpcUrl ?? "https://evmrpc-testnet.0g.ai")
+    });
+  }
+
+  async getToken(contract: string, tokenId: string): Promise<TokenSnapshot | null> {
+    const chainId = await this.client.getChainId();
+    if (chainId !== this.chainId) {
+      throw new Error(`0G chain preflight failed: expected ${this.chainId}, got ${chainId}`);
+    }
+
+    const tokenContract = getContract({
+      address: contract as Address,
+      abi: erc721ReadAbi,
+      client: this.client
+    });
+
+    try {
+      const [owner, metadataUri] = await Promise.all([
+        tokenContract.read.ownerOf([BigInt(tokenId)]),
+        tokenContract.read.tokenURI([BigInt(tokenId)]).catch(() => undefined)
+      ]);
+
+      return {
+        chainId,
+        contract,
+        tokenId,
+        owner,
+        standard: "ERC-721/ERC-7857-like",
+        metadataUri,
+        source: this.source
+      };
+    } catch {
+      return null;
+    }
+  }
+}
+
+export class ZeroGStorageAdapter extends MockStorageAdapter {
+  override readonly source = "hybrid" as const;
+}
+
+export class ZeroGComputeAdapter extends MockComputeAdapter {
+  override readonly source = "hybrid" as const;
+}
+
+export class ZeroGDAAdapter extends MockDAAdapter {
+  override readonly source = "hybrid" as const;
+}

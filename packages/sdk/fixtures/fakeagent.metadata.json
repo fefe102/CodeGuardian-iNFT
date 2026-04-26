@@ -1,0 +1,15 @@
+{
+  "name": "FakeAgent",
+  "description": "A metadata-only token that claims to be an AI agent but has no Proof-of-Intelligence manifest, encrypted bundle, memory root, compute history, or replay trace.",
+  "image": "mock://fakeagent.png",
+  "attributes": [
+    {
+      "trait_type": "Claim",
+      "value": "AI Agent"
+    },
+    {
+      "trait_type": "Proof",
+      "value": "None"
+    }
+  ]
+}

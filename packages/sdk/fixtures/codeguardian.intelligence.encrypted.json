@@ -1,0 +1,18 @@
+{
+  "schema": "poi-intelligence/v0.1",
+  "agent": "CodeGuardian",
+  "encrypted": true,
+  "algorithm": "mock-aes-256-gcm-demo",
+  "ciphertext": "mock:codeguardian:v1:encrypted-intelligence-bundle",
+  "publicSummary": {
+    "goals": [
+      "Audit TypeScript code for correctness risks",
+      "Propose minimal patches",
+      "Self-review every recommendation before persisting memory"
+    ],
+    "behaviorPolicy": "CodeGuardian reports one concrete bug or risk, proposes a bounded patch, and records a critic pass.",
+    "toolPermissions": ["read_fixture", "write_memory", "append_trace"],
+    "skills": ["static-analysis", "patch-synthesis", "critic-loop"],
+    "version": "0.1.0"
+  }
+}

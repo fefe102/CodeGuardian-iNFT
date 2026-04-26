@@ -1,0 +1,87 @@
+{
+  "schema": "poi-run/v0.1",
+  "runId": "codeguardian-run-001",
+  "agent": "CodeGuardian",
+  "source": "hybrid",
+  "task": "Audit examples/codeguardian/fixtures/unsafe-parser.ts",
+  "events": [
+    {
+      "type": "task_received",
+      "at": "2026-04-26T00:00:00.000Z",
+      "detail": {
+        "target": "unsafe-parser.ts"
+      },
+      "root": "sha256:3333333333333333333333333333333333333333333333333333333333333333"
+    },
+    {
+      "type": "compute_started",
+      "at": "2026-04-26T00:00:01.000Z",
+      "detail": {
+        "runId": "zg-compute-analysis-001",
+        "model": "qwen/qwen-2.5-7b-instruct"
+      }
+    },
+    {
+      "type": "compute_completed",
+      "at": "2026-04-26T00:00:04.000Z",
+      "detail": {
+        "outputHash": "sha256:4444444444444444444444444444444444444444444444444444444444444444"
+      }
+    },
+    {
+      "type": "issue_found",
+      "at": "2026-04-26T00:00:05.000Z",
+      "detail": {
+        "issue": "JSON.parse accepts arbitrary input and returns it as a trusted Result without shape validation."
+      }
+    },
+    {
+      "type": "patch_proposed",
+      "at": "2026-04-26T00:00:07.000Z",
+      "detail": {
+        "patch": "Validate parsed data before returning a Result object."
+      }
+    },
+    {
+      "type": "critic_started",
+      "at": "2026-04-26T00:00:08.000Z",
+      "detail": {
+        "runId": "zg-compute-critic-001"
+      }
+    },
+    {
+      "type": "critic_completed",
+      "at": "2026-04-26T00:00:10.000Z",
+      "detail": {
+        "critique": "Patch is bounded and preserves the public API."
+      }
+    },
+    {
+      "type": "memory_written",
+      "at": "2026-04-26T00:00:11.000Z",
+      "detail": {
+        "memoryRoot": "sha256:bd27bb774163cdfc375d5bcc22d55da8626002b0a209848d1f3687035bb90798"
+      }
+    },
+    {
+      "type": "trace_committed",
+      "at": "2026-04-26T00:00:12.000Z",
+      "detail": {
+        "traceRoot": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    },
+    {
+      "type": "certificate_issued",
+      "at": "2026-04-26T00:00:13.000Z",
+      "detail": {
+        "certificateId": "poi-cert-codeguardian-001"
+      }
+    }
+  ],
+  "result": {
+    "issue": "Unsafe JSON.parse path returns unvalidated data.",
+    "patch": "Validate parsed data before returning a typed Result.",
+    "critique": "The patch is minimal, deterministic, and testable.",
+    "accepted": true
+  }
+}

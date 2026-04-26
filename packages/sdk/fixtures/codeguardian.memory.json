@@ -1,0 +1,16 @@
+{
+  "schema": "poi-memory/v0.1",
+  "agent": "CodeGuardian",
+  "checkpoint": {
+    "runCount": 1,
+    "lastFinding": "Unsafe JSON.parse path returns unknown data without validating the expected shape.",
+    "stateRoot": "sha256:1111111111111111111111111111111111111111111111111111111111111111"
+  },
+  "history": [
+    {
+      "runId": "codeguardian-run-001",
+      "summary": "Found unsafe parsing and proposed a zod-backed parseResult guard.",
+      "root": "sha256:2222222222222222222222222222222222222222222222222222222222222222"
+    }
+  ]
+}

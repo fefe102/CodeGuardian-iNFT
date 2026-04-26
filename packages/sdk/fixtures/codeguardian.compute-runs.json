@@ -1,0 +1,23 @@
+{
+  "schema": "poi-compute-runs/v0.1",
+  "provider": "0G Compute mock/hybrid",
+  "model": "qwen/qwen-2.5-7b-instruct",
+  "runs": [
+    {
+      "id": "zg-compute-analysis-001",
+      "type": "analysis",
+      "promptHash": "sha256:5555555555555555555555555555555555555555555555555555555555555555",
+      "outputHash": "sha256:4444444444444444444444444444444444444444444444444444444444444444",
+      "at": "2026-04-26T00:00:04.000Z",
+      "source": "hybrid"
+    },
+    {
+      "id": "zg-compute-critic-001",
+      "type": "critic",
+      "promptHash": "sha256:6666666666666666666666666666666666666666666666666666666666666666",
+      "outputHash": "sha256:7777777777777777777777777777777777777777777777777777777777777777",
+      "at": "2026-04-26T00:00:10.000Z",
+      "source": "hybrid"
+    }
+  ]
+}
