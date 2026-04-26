@@ -108,10 +108,14 @@ export function sanitizedOperation(operation: string) {
     operationId: `poi-${operation}-20260426`,
     operation,
     mode: modeLabel().toLowerCase(),
-    chainId: process.env["0G_CHAIN_ID"] ?? "16602",
+    chainId: zeroGEnv("CHAIN_ID") ?? "16602",
     liveWritesEnabled: liveWritesEnabled(),
     message: liveWritesEnabled()
       ? "Live write preflight would validate 0G Galileo chain id, wallet address, balance, and allowlisted action before sending a transaction."
       : "Live write actions are disabled. Public verification remains available."
   };
+}
+
+function zeroGEnv(suffix: string): string | undefined {
+  return process.env[`0G_${suffix}`] ?? process.env[`ZERO_G_${suffix}`];
 }

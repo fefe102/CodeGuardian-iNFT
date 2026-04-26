@@ -42,3 +42,4 @@ secrets/
 .nyc_output/
 hardhat-cache/
 hardhat-artifacts/
+.vercel

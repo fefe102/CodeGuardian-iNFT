@@ -38,12 +38,16 @@ export function liveConfig(): LiveConfig {
   return {
     mode: process.env.POI_MODE ?? "hybrid",
     enableLiveWrites: process.env.POI_ENABLE_LIVE_WRITES === "true",
-    expectedChainId: Number(process.env["0G_CHAIN_ID"] ?? "16602"),
-    rpcUrl: process.env["0G_RPC_URL"] ?? "https://evmrpc-testnet.0g.ai",
-    privateKey: normalizePrivateKey(process.env["0G_PRIVATE_KEY"]),
-    walletAddress: normalizeAddress(process.env["0G_WALLET_ADDRESS"]),
+    expectedChainId: Number(zeroGEnv("CHAIN_ID") ?? "16602"),
+    rpcUrl: zeroGEnv("RPC_URL") ?? "https://evmrpc-testnet.0g.ai",
+    privateKey: normalizePrivateKey(zeroGEnv("PRIVATE_KEY")),
+    walletAddress: normalizeAddress(zeroGEnv("WALLET_ADDRESS")),
     maxTxPerOperation: Number(process.env.POI_MAX_TX_PER_OPERATION ?? "5")
   };
+}
+
+export function zeroGEnv(suffix: string): string | undefined {
+  return process.env[`0G_${suffix}`] ?? process.env[`ZERO_G_${suffix}`];
 }
 
 export function liveWritesAvailable(config = liveConfig()) {
