@@ -1,1 +1,1 @@
-export const runtimePlaceholder = "CodeGuardian runtime";
+export * from "./codeguardian";
