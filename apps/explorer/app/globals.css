@@ -8,5 +8,25 @@
 
 body {
   margin: 0;
-  background: #07111f;
+  background: #121412;
+  color: #f8fafc;
+  font-feature-settings:
+    "ss01" on,
+    "cv01" on;
+}
+
+::selection {
+  background: #34d399;
+  color: #121412;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: white;
+    color: black;
+  }
 }

@@ -5,7 +5,7 @@ export default defineConfig({
   plugins: [react()],
   test: {
     environment: "node",
-    include: ["packages/**/*.test.ts", "apps/**/*.test.ts", "contracts/**/*.test.ts"],
+    include: ["packages/**/*.test.ts", "packages/**/*.test.tsx", "apps/**/*.test.ts", "apps/**/*.test.tsx"],
     coverage: {
       provider: "v8",
       reporter: ["text", "json-summary"]

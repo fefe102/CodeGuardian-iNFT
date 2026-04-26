@@ -1,20 +1,72 @@
-export default function HomePage() {
+import Link from "next/link";
+import { getAgentProfile, publicStatus } from "../lib/proof";
+import { Badge, TierLadder } from "../components/proof-ui";
+
+export default async function HomePage() {
+  const [codeguardian, fakeagent] = await Promise.all([getAgentProfile("codeguardian"), getAgentProfile("fakeagent")]);
+  const status = publicStatus();
+
   return (
-    <main className="min-h-screen bg-ink px-6 py-12 text-white">
-      <section className="mx-auto max-w-6xl">
-        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-signal">0G iNFT proof layer</p>
-        <h1 className="mt-5 max-w-4xl text-5xl font-semibold leading-tight">Proof-of-Intelligence Explorer</h1>
-        <p className="mt-6 max-w-3xl text-lg leading-8 text-slate-300">
-          Verify that a 0G iNFT agent actually contains encrypted intelligence, persistent memory,
-          compute-backed runs, and replayable behavior.
-        </p>
-        <div className="mt-8 flex flex-wrap gap-3">
-          <a className="rounded-md bg-signal px-5 py-3 font-semibold text-ink" href="/agent/codeguardian">
-            Verify CodeGuardian
-          </a>
-          <a className="rounded-md border border-slate-600 px-5 py-3 font-semibold text-slate-100" href="/agent/fakeagent">
-            Try FakeAgent
-          </a>
+    <main className="bg-ink text-white">
+      <section className="min-h-[calc(100svh-64px)] border-b border-white/10 px-5 py-12 md:py-20">
+        <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+          <div>
+            <Badge tone="good">{status.mode} 0G evidence mode</Badge>
+            <h1 className="mt-6 max-w-4xl text-5xl font-semibold leading-tight md:text-7xl">
+              Proof-of-Intelligence Explorer
+            </h1>
+            <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
+              Verify that a 0G iNFT agent actually contains encrypted intelligence, persistent memory,
+              compute-backed runs, and replayable behavior.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link className="rounded-md bg-emerald-300 px-5 py-3 font-semibold text-[#121412]" href="/agent/codeguardian">
+                Verify CodeGuardian
+              </Link>
+              <Link className="rounded-md border border-white/15 px-5 py-3 font-semibold text-slate-100" href="/agent/fakeagent">
+                Try FakeAgent
+              </Link>
+            </div>
+          </div>
+
+          <div className="relative min-h-[420px] overflow-hidden rounded-md border border-white/10 bg-[#171917] p-6">
+            <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-300 via-amber-300 to-transparent" />
+            <div className="text-sm uppercase text-slate-500">Live verifier readout</div>
+            <div className="mt-6 grid gap-8 md:grid-cols-2">
+              <div>
+                <div className="text-3xl font-semibold">{codeguardian.name}</div>
+                <p className="mt-2 text-sm text-slate-400">{codeguardian.headline}</p>
+                <div className="mt-6">
+                  <TierLadder tier={codeguardian.report.tier} />
+                </div>
+              </div>
+              <div>
+                <div className="text-3xl font-semibold">{fakeagent.name}</div>
+                <p className="mt-2 text-sm text-slate-400">{fakeagent.headline}</p>
+                <div className="mt-6">
+                  <TierLadder tier={fakeagent.report.tier} />
+                </div>
+              </div>
+            </div>
+            <div className="mt-8 border-t border-white/10 pt-5">
+              <code className="break-all text-xs text-emerald-200">{codeguardian.report.evidence.latestRunRoot}</code>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="px-5 py-16">
+        <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-3">
+          {[
+            ["Why Proof-of-Intelligence?", "Many agent NFTs are metadata pointers. This explorer checks for actual encrypted intelligence, memory, compute history, and behavior traces."],
+            ["0G full-stack evidence", "0G Chain anchors iNFT passports, 0G Storage carries roots and encrypted bundles, 0G Compute records analysis and critic runs, and DA export is optional."],
+            ["Developer SDK", "Any iNFT team can adopt the manifest schema, adapters, CLI, and proof export to make intelligence claims verifiable."]
+          ].map(([title, body]) => (
+            <div key={title} className="border-t border-white/10 pt-5">
+              <h2 className="text-xl font-semibold">{title}</h2>
+              <p className="mt-3 leading-7 text-slate-400">{body}</p>
+            </div>
+          ))}
         </div>
       </section>
     </main>
