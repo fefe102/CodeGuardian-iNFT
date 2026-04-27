@@ -60,7 +60,10 @@ export function modeLabel() {
 export function publicStatus() {
   return {
     ok: true,
-    app: process.env.NEXT_PUBLIC_APP_NAME ?? "Proof-of-Intelligence Explorer",
+    app: "CodeGuardian iNFT",
+    proofLayer:
+      process.env.NEXT_PUBLIC_APP_NAME ??
+      "AgentProof - Proof-of-Intelligence Explorer",
     mode: modeLabel().toLowerCase(),
     liveWritesEnabled: liveWritesEnabled(),
     chainId: String(currentChainId()),
