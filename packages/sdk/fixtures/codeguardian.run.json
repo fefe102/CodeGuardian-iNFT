@@ -67,7 +67,7 @@
       "type": "trace_committed",
       "at": "2026-04-26T00:00:12.000Z",
       "detail": {
-        "traceRoot": "sha256:0000000000000000000000000000000000000000000000000000000000000000"
+        "preCertificateTraceRoot": "sha256:1bd8af6ab0905f137e20956b13389234b39ebad5329f98dd000e7acbdc16aa8c"
       }
     },
     {

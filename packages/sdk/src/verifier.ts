@@ -65,7 +65,12 @@ export type VerificationReport = {
 
 export type VerifyTarget =
   | { alias: string }
-  | { contract: string; tokenId: string }
+  | {
+      contract: string;
+      tokenId: string;
+      chainId?: number;
+      manifestRoot?: string;
+    }
   | { manifest: Manifest }
   | { manifestRoot: string }
   | { ens: string };
@@ -293,6 +298,16 @@ export class ProofOfIntelligenceVerifier {
       token =
         (await this.chain.getToken(target.contract, target.tokenId)) ??
         undefined;
+      if (target.manifestRoot) {
+        manifest =
+          (await this.storage.getManifestByRoot(target.manifestRoot)) ??
+          undefined;
+      }
+      if (!manifest && token?.manifestRoot) {
+        manifest =
+          (await this.storage.getManifestByRoot(token.manifestRoot)) ??
+          undefined;
+      }
     }
 
     if ("alias" in target) {
@@ -307,7 +322,7 @@ export class ProofOfIntelligenceVerifier {
       }
     }
 
-    if ("manifestRoot" in target) {
+    if ("manifestRoot" in target && target.manifestRoot) {
       manifest =
         (await this.storage.getManifestByRoot(target.manifestRoot)) ??
         undefined;

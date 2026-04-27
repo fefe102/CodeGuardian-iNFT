@@ -20,8 +20,14 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               <Link href="/verify" className="hover:text-white">
                 Verify
               </Link>
+              <Link href="/create" className="hover:text-white">
+                Create Passport
+              </Link>
+              <Link href="/agent/codeguardian" className="hover:text-white">
+                Demo
+              </Link>
               <Link href="/developer" className="hover:text-white">
-                SDK
+                Developer
               </Link>
               <Link href="/admin" className="hover:text-white">
                 Admin

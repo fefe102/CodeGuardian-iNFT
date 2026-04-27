@@ -2,6 +2,12 @@
 
 ## Core Rules
 
+- Before planning or editing, read `SPEC.md`.
+- `SPEC.md` is canonical for product direction.
+- `STATUS.md` tracks current backlog.
+- Do not contradict `SPEC.md` unless the task explicitly changes product direction.
+- Update `SPEC.md` when product direction changes.
+- Update `STATUS.md` when backlog changes.
 - Solve only the stated problem. Do not add speculative features, hooks, configurability, or abstractions.
 - Keep code as small as practical. If a simple solution is available, use it.
 - Make surgical diffs. Every changed line must trace directly to the request.
@@ -18,6 +24,7 @@
 - Prefer tests, scripts, benchmarks, screenshots, or type checks over reasoning from the diff.
 - Run the relevant verification before saying the task is done.
 - Run lint, typecheck, test, and build before commits when practical; otherwise run the relevant narrower check and explain why.
+- Always run build/test/fix loops before commits.
 - If verification fails, fix the root cause, not the test.
 - For UI changes, verify visually with before/after screenshots when practical.
 - Read full errors, logs, and stack traces before changing code.

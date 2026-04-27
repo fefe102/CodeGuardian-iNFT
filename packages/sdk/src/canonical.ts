@@ -63,3 +63,21 @@ export function manifestProofPayload<T>(manifest: T): T {
 export function hashManifestForProof(manifest: unknown): string {
   return hashCanonicalJson(manifestProofPayload(manifest));
 }
+
+export const hashManifestForRoot = hashManifestForProof;
+
+export function hashIntelligenceBundle(bundle: unknown): string {
+  return hashCanonicalJson(bundle);
+}
+
+export function hashMemoryEvidence(memory: unknown): string {
+  return hashCanonicalJson(memory);
+}
+
+export function hashRunTrace(trace: unknown): string {
+  return hashCanonicalJson(trace);
+}
+
+export function hashCertificate(certificate: unknown): string {
+  return hashCanonicalJson(certificate);
+}

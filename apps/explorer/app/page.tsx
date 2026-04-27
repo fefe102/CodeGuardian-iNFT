@@ -1,5 +1,11 @@
 import Link from "next/link";
-import { getAgentProfile, publicStatus } from "../lib/proof";
+import {
+  badgePath,
+  getAgentProfile,
+  passportPath,
+  publicStatus,
+  seededCodeGuardianTarget,
+} from "../lib/proof";
 import { Badge, TierLadder } from "../components/proof-ui";
 
 export default async function HomePage() {
@@ -8,6 +14,7 @@ export default async function HomePage() {
     getAgentProfile("fakeagent"),
   ]);
   const status = publicStatus();
+  const demoTarget = seededCodeGuardianTarget();
 
   return (
     <main className="bg-ink text-white">
@@ -15,27 +22,45 @@ export default async function HomePage() {
         <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
           <div>
             <Badge tone="good">{status.mode} 0G evidence mode</Badge>
-            <h1 className="mt-6 max-w-4xl text-5xl font-semibold leading-tight md:text-7xl">
+            <p className="mt-5 text-sm uppercase text-slate-500">
               Proof-of-Intelligence Explorer
+            </p>
+            <h1 className="mt-6 max-w-4xl text-5xl font-semibold leading-tight md:text-7xl">
+              Verify any 0G iNFT agent.
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-              Verify that a 0G iNFT agent actually contains encrypted
+              Check whether an agent NFT actually contains encrypted
               intelligence, persistent memory, compute-backed runs, and
-              replayable behavior.
+              replayable behavior. Generate a public report, certificate, API,
+              and badge.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
                 className="rounded-md bg-emerald-300 px-5 py-3 font-semibold text-[#121412]"
-                href="/agent/codeguardian"
+                href="/verify"
               >
-                Verify CodeGuardian
+                Verify an Agent
               </Link>
               <Link
                 className="rounded-md border border-white/15 px-5 py-3 font-semibold text-slate-100"
-                href="/agent/fakeagent"
+                href="/create"
               >
-                Try FakeAgent
+                Create Passport
               </Link>
+              <Link
+                className="rounded-md border border-white/15 px-5 py-3 font-semibold text-slate-100"
+                href="/agent/codeguardian"
+              >
+                Compare Real vs Fake
+              </Link>
+            </div>
+            <div className="mt-8 rounded-md border border-white/10 bg-black/20 p-4">
+              <div className="text-sm uppercase text-slate-500">
+                Public badge
+              </div>
+              <code className="mt-2 block break-all text-xs text-emerald-200">
+                {`[![Proof of Intelligence](${badgePath(demoTarget)})](${passportPath(demoTarget)})`}
+              </code>
             </div>
           </div>
 

@@ -1,13 +1,19 @@
 import { renderToString } from "react-dom/server";
 import { afterEach, describe, expect, it } from "vitest";
+import { NextRequest } from "next/server";
 import AdminPage from "./app/admin/page";
 import AgentPage from "./app/agent/[agent]/page";
+import { GET as BadgeGET } from "./app/badge/[chainId]/[contract]/[tokenId].svg/route";
 import CertificatePage from "./app/certificate/[certificateId]/page";
+import CreatePage from "./app/create/page";
 import HomePage from "./app/page";
+import PassportPage from "./app/passport/[chainId]/[contract]/[tokenId]/page";
 import RunPage from "./app/run/[runId]/page";
+import VerifyPage from "./app/verify/page";
+import { GET as VerifyGET } from "./app/api/verify/route";
 import { adminJson } from "./app/api/admin/_shared";
 import { adminOperationBody, validateAdminRequest } from "./lib/admin";
-import { publicStatus } from "./lib/proof";
+import { publicStatus, seededCodeGuardianTarget } from "./lib/proof";
 
 const originalEnv = { ...process.env };
 const adminTokenName = "POI_ADMIN_TOKEN";
@@ -22,7 +28,26 @@ describe("explorer app smoke tests", () => {
   it("home page renders", async () => {
     const html = renderToString(await HomePage());
     expect(html).toContain("Proof-of-Intelligence Explorer");
-    expect(html).toContain("Verify CodeGuardian");
+    expect(html).toContain("Verify any 0G iNFT agent");
+    expect(html).toContain("Create Passport");
+  });
+
+  it("verify page has arbitrary token form", async () => {
+    const html = renderToString(
+      await VerifyPage({ searchParams: Promise.resolve({}) }),
+    );
+    expect(html).toContain("Contract");
+    expect(html).toContain("Token ID");
+    expect(html).toContain("Open Passport");
+  });
+
+  it("create page renders Passport wizard", async () => {
+    const html = renderToString(
+      await CreatePage({ searchParams: Promise.resolve({}) }),
+    );
+    expect(html).toContain("Create Passport");
+    expect(html).toContain("Manifest root");
+    expect(html).toContain("Badge embed");
   });
 
   it("CodeGuardian page renders high-tier verification", async () => {
@@ -63,12 +88,65 @@ describe("explorer app smoke tests", () => {
     expect(html).toContain("CodeGuardian");
   });
 
+  it("dynamic passport page works", async () => {
+    const target = seededCodeGuardianTarget();
+    const html = renderToString(
+      await PassportPage({
+        params: Promise.resolve({
+          chainId: String(target.chainId),
+          contract: target.contract,
+          tokenId: target.tokenId,
+        }),
+      }),
+    );
+    expect(html).toContain("Passport #");
+    expect(html).toContain("Badge embed");
+    expect(html).toContain(target.contract);
+  });
+
   it("admin page does not expose secrets", () => {
     process.env[adminTokenName] = "fixture-admin-token-alpha";
     process.env[privateKeyName] = "fixture-wallet-material";
     const html = renderToString(<AdminPage />);
     expect(html).not.toContain("fixture-admin-token-alpha");
     expect(html).not.toContain("fixture-wallet-material");
+  });
+});
+
+describe("public API and badge routes", () => {
+  it("verify API supports aliases", async () => {
+    const response = await VerifyGET(
+      new NextRequest("https://example.test/api/verify?agent=codeguardian"),
+    );
+    const json = await response.json();
+    expect(json.tier).toBeGreaterThanOrEqual(5);
+  });
+
+  it("verify API supports arbitrary contract/token input", async () => {
+    const target = seededCodeGuardianTarget();
+    const response = await VerifyGET(
+      new NextRequest(
+        `https://example.test/api/verify?chainId=${target.chainId}&contract=${target.contract}&tokenId=${target.tokenId}`,
+      ),
+    );
+    const json = await response.json();
+    expect(json.tier).toBe(6);
+    expect(json.token.contract).toBe(target.contract);
+  });
+
+  it("badge SVG endpoint works", async () => {
+    const target = seededCodeGuardianTarget();
+    const response = await BadgeGET(new Request("https://example.test") as never, {
+      params: Promise.resolve({
+        chainId: String(target.chainId),
+        contract: target.contract,
+        tokenId: target.tokenId,
+      }),
+    });
+    const svg = await response.text();
+    expect(response.headers.get("content-type")).toContain("image/svg+xml");
+    expect(svg).toContain("Proof of Intelligence");
+    expect(svg).toContain("Tier 6");
   });
 });
 
@@ -96,6 +174,22 @@ describe("admin route security", () => {
       headers: new Headers({ authorization: "Bearer fixture-admin-token" }),
     });
     expect(result).toBeNull();
+  });
+
+  it("accepts x-poi-admin-token and rejects valid token when writes are disabled", () => {
+    process.env[adminTokenName] = "fixture-admin-token";
+    process.env.POI_ENABLE_LIVE_WRITES = "true";
+    expect(
+      validateAdminRequest({
+        headers: new Headers({ "x-poi-admin-token": "fixture-admin-token" }),
+      }),
+    ).toBeNull();
+
+    process.env.POI_ENABLE_LIVE_WRITES = "false";
+    const result = validateAdminRequest({
+      headers: new Headers({ authorization: "Bearer fixture-admin-token" }),
+    });
+    expect(result?.status).toBe(403);
   });
 
   it("marks admin responses as non-cacheable", () => {

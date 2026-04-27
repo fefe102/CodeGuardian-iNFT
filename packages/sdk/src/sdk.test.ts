@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import codeguardianBundle from "../fixtures/codeguardian.intelligence.encrypted.json";
+import codeguardianCertificate from "../fixtures/codeguardian.certificate.json";
 import codeguardianManifest from "../fixtures/codeguardian.manifest.json";
 import codeguardianMemory from "../fixtures/codeguardian.memory.json";
 import codeguardianRun from "../fixtures/codeguardian.run.json";
@@ -9,10 +10,16 @@ import {
   MockStorageAdapter,
   canonicalizeJson,
   createVerifier,
+  createPassportManifest,
+  createPoiRecorder,
   exportDaBundle,
+  hashRunTrace,
   hashManifestForProof,
   hashCanonicalJson,
+  passportFromReport,
+  badgeStatusForTier,
   verifyComputeHistory,
+  verifyCertificate,
   verifyIntelligenceBundle,
   verifyManifest,
   verifyMemory,
@@ -53,6 +60,21 @@ describe("Proof-of-Intelligence SDK", () => {
     expect(report.tier).toBeLessThanOrEqual(1);
     expect(report.status).toBe("failed");
     expect(report.missing).toContain("Proof-of-Intelligence manifest");
+  });
+
+  it("returns a low tier for an arbitrary token with no manifest", async () => {
+    const report = await createVerifier().verify({
+      contract: "0x1111111111111111111111111111111111117857",
+      tokenId: "1",
+    });
+    expect(report.tier).toBe(6);
+
+    const missing = await createVerifier().verify({
+      contract: "0x9999999999999999999999999999999999999999",
+      tokenId: "404",
+    });
+    expect(missing.tier).toBe(0);
+    expect(missing.status).toBe("unsupported");
   });
 
   it("detects an intelligence root mismatch", () => {
@@ -132,9 +154,74 @@ describe("Proof-of-Intelligence SDK", () => {
     expect(check.ok).toBe(false);
   });
 
+  it("detects certificate iNFT mismatches", () => {
+    const certificate = structuredClone(codeguardianCertificate);
+    certificate.evidence.inft.contract =
+      "0x9999999999999999999999999999999999999999";
+    const check = verifyCertificate(
+      certificate,
+      codeguardianManifest as Manifest,
+    );
+    expect(check.ok).toBe(false);
+  });
+
   it("validates the bundled run trace root", () => {
-    expect(hashCanonicalJson(codeguardianRun as RunTrace)).toBe(
+    const run = codeguardianRun as RunTrace;
+    expect(JSON.stringify(run)).not.toContain(
+      "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    );
+    expect(hashRunTrace(run)).toBe(
       (codeguardianManifest as Manifest).storage.latestRunRoot,
     );
+  });
+
+  it("creates Passport drafts and recorder traces", async () => {
+    const manifest = createPassportManifest({
+      chainId: 16602,
+      contract: "0x1111111111111111111111111111111111117857",
+      tokenId: "7",
+      owner: "0x053b860f329c9e4549d23dc8aadf1116b99f1233",
+      name: "BuilderAgent",
+      description: "A builder-created testnet Passport.",
+      skills: [{ name: "audit" }],
+      allowedActions: ["verify"],
+      memoryPolicy: "checkpointed-kv",
+      intelligence: { goals: ["test"] },
+    });
+    expect(hashManifestForProof(manifest)).toBe(
+      manifest.storage.manifestRoot,
+    );
+
+    const recorder = createPoiRecorder({
+      chainId: 16602,
+      contract: manifest.inft.contract,
+      tokenId: manifest.inft.tokenId,
+      agent: manifest.name,
+    });
+    await recorder.startRun({ task: "Audit this repository" });
+    await recorder.recordComputeCall({
+      model: "0G Compute",
+      inputHash: manifest.storage.manifestRoot,
+      outputHash: manifest.storage.memoryRoot,
+    });
+    await recorder.recordMemoryWrite({
+      memoryRoot: manifest.storage.memoryRoot,
+    });
+    const run = await recorder.finishRun({
+      resultRoot: manifest.storage.latestRunRoot,
+    });
+    expect(run.events.map((event) => event.type)).toContain(
+      "compute_completed",
+    );
+  });
+
+  it("maps reports to passports and badge statuses", async () => {
+    const report = await createVerifier().verify("codeguardian");
+    const passport = passportFromReport(report);
+    expect(passport.verificationTier).toBe(6);
+    expect(badgeStatusForTier(passport.verificationTier)).toBe("Tier 6");
+    expect(badgeStatusForTier(2)).toBe("Partial");
+    expect(badgeStatusForTier(1)).toBe("Failed");
+    expect(badgeStatusForTier(0)).toBe("Unknown");
   });
 });

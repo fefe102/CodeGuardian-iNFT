@@ -11,9 +11,13 @@ import {
   ArtifactComputeAdapter,
   ArtifactStorageAdapter,
   MockChainAdapter,
+  ZeroGChainAdapter,
+  computeEvidenceRoots,
+  createPassportManifest,
   createVerifier,
   exportDaBundle,
   exportProofJson,
+  type PassportDraft,
   type ChainAdapter,
   type ProofStorageBundle,
   type RunTrace,
@@ -64,11 +68,18 @@ program
 
 program
   .command("verify")
-  .argument("<target>", "codeguardian, fakeagent, or contract:tokenId")
-  .action(async (target: string) => {
-    const report = target.includes(":")
-      ? await verifyContractTarget(createVerifier(), target)
-      : await verifyDemoTarget(target);
+  .argument("[target]", "codeguardian, fakeagent, or contract:tokenId")
+  .option("--chain-id <chainId>", "0G chain id", "16602")
+  .option("--contract <address>", "iNFT/token contract")
+  .option("--token-id <tokenId>", "token id")
+  .option("--manifest-root <root>", "optional Proof-of-Intelligence manifest root")
+  .action(async (target: string | undefined, options: VerifyOptions) => {
+    const report =
+      options.contract && options.tokenId
+        ? await verifyArbitraryTarget(options)
+        : target?.includes(":")
+          ? await verifyContractTarget(target, options)
+          : await verifyDemoTarget(target ?? "codeguardian");
     console.log(
       JSON.stringify(
         {
@@ -83,12 +94,61 @@ program
         2,
       ),
     );
-    if (target.toLowerCase() === "codeguardian" && report.tier < 5) {
+    if (target?.toLowerCase() === "codeguardian" && report.tier < 5) {
       process.exitCode = 1;
     }
-    if (target.toLowerCase() === "fakeagent" && report.tier > 2) {
+    if (target?.toLowerCase() === "fakeagent" && report.tier > 2) {
       process.exitCode = 1;
     }
+  });
+
+program
+  .command("create-passport")
+  .description("Create a deterministic Proof-of-Intelligence Passport draft")
+  .option("--chain-id <chainId>", "0G chain id", "16602")
+  .option("--contract <address>", "iNFT/token contract", demoAddress())
+  .option("--token-id <tokenId>", "token id", "1")
+  .option("--owner <address>", "token owner", demoOwner())
+  .option("--name <name>", "agent name", "My 0G Agent")
+  .option(
+    "--description <description>",
+    "agent description",
+    "A testnet iNFT agent with packaged intelligence and memory evidence.",
+  )
+  .action((options: CreatePassportOptions) => {
+    const draft: PassportDraft = {
+      chainId: Number(options.chainId),
+      contract: options.contract,
+      tokenId: options.tokenId,
+      owner: options.owner,
+      name: options.name,
+      description: options.description,
+      skills: [{ name: "proof-recorder", permissions: ["verify", "replay"] }],
+      allowedActions: ["verify", "replay", "export-proof"],
+      memoryPolicy: "checkpointed-kv",
+      intelligence: {
+        name: options.name,
+        goals: ["Publish verifiable Proof-of-Intelligence evidence"],
+        behaviorPolicy: "Only execute allowlisted testnet actions.",
+        toolPermissions: ["read-public-data", "write-proof-roots"],
+        skills: ["proof-recorder"],
+      },
+    };
+    const manifest = createPassportManifest(draft);
+    console.log(
+      JSON.stringify(
+        {
+          ok: true,
+          mode: process.env.POI_MODE ?? "hybrid",
+          manifest,
+          roots: computeEvidenceRoots({ manifest }),
+          passportUrl: `/passport/${draft.chainId}/${draft.contract}/${draft.tokenId}`,
+          badgeUrl: `/badge/${draft.chainId}/${draft.contract}/${draft.tokenId}.svg`,
+        },
+        null,
+        2,
+      ),
+    );
   });
 
 program
@@ -158,15 +218,69 @@ program
 
 program.parse();
 
-async function verifyContractTarget(
-  verifier: ReturnType<typeof createVerifier>,
-  target: string,
-) {
+type VerifyOptions = {
+  chainId: string;
+  contract?: string;
+  tokenId?: string;
+  manifestRoot?: string;
+};
+
+type CreatePassportOptions = {
+  chainId: string;
+  contract: string;
+  tokenId: string;
+  owner: string;
+  name: string;
+  description: string;
+};
+
+async function verifyContractTarget(target: string, options: VerifyOptions) {
   const [contract, tokenId] = target.split(":");
   if (!contract || !tokenId) {
     throw new Error("Contract target must be contract:tokenId");
   }
-  return verifier.verify({ contract, tokenId });
+  return verifyArbitraryTarget({ ...options, contract, tokenId });
+}
+
+async function verifyArbitraryTarget(options: VerifyOptions) {
+  if (!options.contract || !options.tokenId) {
+    throw new Error("Use --contract and --token-id for arbitrary verification");
+  }
+  const deployment =
+    readJson<Record<string, string>>(repoPath("deployments/0g-galileo.json")) ??
+    {};
+  if (
+    deployment.demoInftAddress &&
+    options.contract.toLowerCase() ===
+      deployment.demoInftAddress.toLowerCase() &&
+    options.tokenId === (deployment.codeguardianTokenId ?? "1")
+  ) {
+    return verifyDemoTarget("codeguardian");
+  }
+  if (
+    deployment.demoInftAddress &&
+    options.contract.toLowerCase() ===
+      deployment.demoInftAddress.toLowerCase() &&
+    options.tokenId === (deployment.fakeagentTokenId ?? "2")
+  ) {
+    return verifyDemoTarget("fakeagent");
+  }
+  return createVerifier({
+    chain: new ZeroGChainAdapter({
+      chainId: Number(options.chainId),
+      rpcUrl: process.env["0G_RPC_URL"] ?? process.env.NEXT_PUBLIC_0G_RPC_URL,
+    }),
+    storage: new ArtifactStorageAdapter(
+      readJson<ProofStorageBundle>(
+        repoPath("deployments/0g-storage-bundle.json"),
+      ) ?? {},
+    ),
+  }).verify({
+    contract: options.contract,
+    tokenId: options.tokenId,
+    chainId: Number(options.chainId),
+    manifestRoot: options.manifestRoot,
+  });
 }
 
 async function verifyDemoTarget(target: string): Promise<VerificationReport> {
@@ -293,6 +407,22 @@ function explainScript(command: string) {
       2,
     ),
   );
+}
+
+function demoAddress() {
+  const deployment =
+    readJson<Record<string, string>>(repoPath("deployments/0g-galileo.json")) ??
+    {};
+  return (
+    deployment.demoInftAddress ?? "0x0000000000000000000000000000000000000000"
+  );
+}
+
+function demoOwner() {
+  const deployment =
+    readJson<Record<string, string>>(repoPath("deployments/0g-galileo.json")) ??
+    {};
+  return deployment.deployer ?? "0x053b860f329c9e4549d23dc8aadf1116b99f1233";
 }
 
 function repoPath(path: string) {
