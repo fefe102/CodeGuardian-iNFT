@@ -1,38 +1,64 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ProductMark } from "../components/product-logo";
+import { ThemeToggle } from "../components/theme-toggle";
 import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Proof-of-Intelligence Explorer",
-  description: "Verify encrypted intelligence, persistent memory, compute history, and replayable iNFT behavior."
+  description:
+    "Verify encrypted intelligence, persistent memory, compute history, and replayable iNFT behavior.",
+  applicationName: "Proof-of-Intelligence Explorer",
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+const themeInitScript = `
+  (() => {
+    try {
+      const stored = window.localStorage.getItem("poi-theme");
+      const theme = stored === "light" || stored === "dark"
+        ? stored
+        : window.matchMedia("(prefers-color-scheme: light)").matches
+          ? "light"
+          : "dark";
+      document.documentElement.dataset.theme = theme;
+      document.documentElement.style.colorScheme = theme;
+    } catch {
+      document.documentElement.dataset.theme = "dark";
+      document.documentElement.style.colorScheme = "dark";
+    }
+  })();
+`;
+
+export default function RootLayout({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme="dark" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body>
-        <header className="no-print border-b border-white/10 bg-ink/90">
-          <nav className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
-            <Link href="/" className="text-sm font-semibold text-white">
-              Proof-of-Intelligence Explorer
+        <header className="app-shell-header no-print">
+          <nav className="app-shell-nav">
+            <Link
+              href="/"
+              className="app-brand"
+              aria-label="Proof-of-Intelligence Explorer home"
+            >
+              <ProductMark className="app-brand-mark" />
+              <span className="app-brand-copy">
+                <span>Proof-of-Intelligence</span>
+                <span>Explorer</span>
+              </span>
             </Link>
-            <div className="flex items-center gap-4 text-sm text-slate-300">
-              <Link href="/verify" className="hover:text-white">
-                Verify
-              </Link>
-              <Link href="/create" className="hover:text-white">
-                Create Passport
-              </Link>
-              <Link href="/agent/codeguardian" className="hover:text-white">
-                Demo
-              </Link>
-              <Link href="/developer" className="hover:text-white">
-                Developer
-              </Link>
-              <Link href="/admin" className="hover:text-white">
-                Admin
-              </Link>
+            <div className="app-shell-links">
+              <Link href="/verify">Verify</Link>
+              <Link href="/create">Create Passport</Link>
+              <Link href="/agent/codeguardian">Demo</Link>
+              <Link href="/developer">Developer</Link>
+              <Link href="/admin">Admin</Link>
             </div>
+            <ThemeToggle />
           </nav>
         </header>
         {children}

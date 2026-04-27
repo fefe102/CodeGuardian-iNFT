@@ -4,20 +4,316 @@
 
 :root {
   color-scheme: dark;
+  --app-bg: #121412;
+  --app-surface: #171917;
+  --app-panel: rgb(0 0 0 / 0.2);
+  --app-border: rgb(255 255 255 / 0.1);
+  --app-border-strong: rgb(255 255 255 / 0.15);
+  --app-header: rgb(18 20 18 / 0.92);
+  --app-text: #f8fafc;
+  --app-strong: #ffffff;
+  --app-muted: #cbd5e1;
+  --app-subtle: #94a3b8;
+  --app-code: #a7f3d0;
+  --app-accent: #34d399;
+  --app-warn: #fbbf24;
+  --app-danger: #f87171;
+  --app-accent-contrast: #121412;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --app-bg: #f8fafc;
+  --app-surface: #ffffff;
+  --app-panel: #eef2f7;
+  --app-border: rgb(15 23 42 / 0.12);
+  --app-border-strong: rgb(15 23 42 / 0.18);
+  --app-header: rgb(248 250 252 / 0.92);
+  --app-text: #0f172a;
+  --app-strong: #020617;
+  --app-muted: #475569;
+  --app-subtle: #64748b;
+  --app-code: #047857;
+  --app-accent: #059669;
+  --app-warn: #b45309;
+  --app-danger: #b91c1c;
+  --app-accent-contrast: #ffffff;
 }
 
 body {
   margin: 0;
-  background: #121412;
-  color: #f8fafc;
+  background: var(--app-bg);
+  color: var(--app-text);
   font-feature-settings:
     "ss01" on,
     "cv01" on;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
 }
 
 ::selection {
-  background: #34d399;
-  color: #121412;
+  background: var(--app-accent);
+  color: var(--app-accent-contrast);
+}
+
+main :where(.grid > *) {
+  min-width: 0;
+}
+
+code {
+  overflow-wrap: anywhere;
+}
+
+.app-shell-header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  border-bottom: 1px solid var(--app-border);
+  background: var(--app-header);
+  backdrop-filter: blur(18px);
+}
+
+.app-shell-nav {
+  display: grid;
+  width: min(100%, 100vw);
+  align-items: center;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 1rem;
+  max-width: min(80rem, 100vw);
+  margin: 0 auto;
+  padding: 0.85rem 1.25rem;
+}
+
+.app-brand {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--app-strong);
+  text-decoration: none;
+}
+
+.app-brand-mark {
+  display: grid;
+  width: 2.25rem;
+  height: 2.25rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid rgb(52 211 153 / 0.5);
+  border-radius: 0.5rem;
+  color: var(--app-accent);
+  background:
+    radial-gradient(circle at 30% 20%, rgb(251 191 36 / 0.24), transparent 34%),
+    rgb(52 211 153 / 0.1);
+}
+
+.app-brand-mark svg {
+  width: 1.55rem;
+  height: 1.55rem;
+}
+
+.app-brand-copy {
+  display: grid;
+  gap: 0.05rem;
+  font-size: 0.86rem;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: 0;
+}
+
+.app-brand-copy span:last-child {
+  color: var(--app-subtle);
+  font-weight: 600;
+}
+
+.app-shell-links {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-self: end;
+  gap: 1rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+  white-space: nowrap;
+}
+
+.app-shell-links::-webkit-scrollbar {
+  display: none;
+}
+
+.app-shell-links a {
+  color: var(--app-muted);
+  font-size: 0.875rem;
+  text-decoration: none;
+  transition: color 160ms ease;
+}
+
+.app-shell-links a:hover {
+  color: var(--app-strong);
+}
+
+.theme-toggle {
+  display: inline-flex;
+  min-width: 5.6rem;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  border: 1px solid var(--app-border-strong);
+  border-radius: 999px;
+  background: var(--app-panel);
+  color: var(--app-strong);
+  padding: 0.45rem 0.7rem;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease,
+    color 160ms ease;
+}
+
+.theme-toggle:hover {
+  border-color: rgb(52 211 153 / 0.55);
+}
+
+.theme-toggle:focus-visible,
+.app-shell-links a:focus-visible,
+.app-brand:focus-visible {
+  outline: 2px solid var(--app-accent);
+  outline-offset: 3px;
+}
+
+.theme-toggle-icon,
+.theme-toggle-icon svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.theme-toggle-icon svg {
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+:root[data-theme="light"] :where([class~="bg-ink"], [class~="bg-ink/90"]) {
+  background-color: var(--app-bg);
+}
+
+:root[data-theme="light"]
+  :where([class~="bg-[#171917]"], [class~="bg-[#111411]"]) {
+  background-color: var(--app-surface);
+}
+
+:root[data-theme="light"]
+  :where(
+    [class~="bg-black/20"],
+    [class~="bg-black/25"],
+    [class~="bg-black/30"],
+    [class~="bg-white/5"]
+  ) {
+  background-color: var(--app-panel);
+}
+
+:root[data-theme="light"]
+  :where([class~="text-white"], [class~="text-slate-100"]) {
+  color: var(--app-strong);
+}
+
+:root[data-theme="light"]
+  :where([class~="text-slate-200"], [class~="text-slate-300"]) {
+  color: var(--app-text);
+}
+
+:root[data-theme="light"] :where([class~="text-slate-400"]) {
+  color: var(--app-muted);
+}
+
+:root[data-theme="light"] :where([class~="text-slate-500"]) {
+  color: var(--app-subtle);
+}
+
+:root[data-theme="light"] :where([class~="text-emerald-200"]) {
+  color: var(--app-code);
+}
+
+:root[data-theme="light"]
+  :where([class~="text-amber-100"], [class~="text-amber-200"]) {
+  color: var(--app-warn);
+}
+
+:root[data-theme="light"] :where([class~="text-red-200"]) {
+  color: var(--app-danger);
+}
+
+:root[data-theme="light"] :where([class~="border-white/10"]) {
+  border-color: var(--app-border);
+}
+
+:root[data-theme="light"] :where([class~="border-white/15"]) {
+  border-color: var(--app-border-strong);
+}
+
+:root[data-theme="light"]
+  :where([class~="divide-white/10"])
+  > :not([hidden])
+  ~ :not([hidden]) {
+  border-color: var(--app-border);
+}
+
+:root[data-theme="light"] :where(input, textarea) {
+  caret-color: var(--app-accent);
+}
+
+@media (max-width: 760px) {
+  .app-shell-nav {
+    align-items: stretch;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.75rem;
+  }
+
+  .app-shell-links {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    width: 100%;
+    flex: 1 1 auto;
+    justify-self: stretch;
+    gap: 0.85rem;
+  }
+
+  .theme-toggle {
+    grid-column: 1 / -1;
+    grid-row: 3;
+    justify-self: start;
+  }
+
+  main :where(h1, p, code, pre) {
+    max-width: calc(100vw - 2.5rem);
+  }
+
+  main p.max-w-2xl,
+  main p.max-w-3xl {
+    max-width: min(100%, 26rem);
+  }
+
+  main .max-w-7xl,
+  main .max-w-5xl,
+  main .max-w-4xl,
+  main .max-w-3xl,
+  main .max-w-2xl {
+    max-width: calc(100vw - 2.5rem);
+  }
+}
+
+@media (max-width: 460px) {
+  .app-brand-copy {
+    font-size: 0.8rem;
+  }
 }
 
 @media print {
