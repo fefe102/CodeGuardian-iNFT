@@ -1,6 +1,6 @@
 # Security Audit
 
-Audit date: 2026-04-26
+Audit date: 2026-04-27
 
 ## Scope
 
@@ -21,8 +21,8 @@ Production posture is suitable for the hosted hackathon demo:
 - no private keys, admin tokens, bearer tokens, encryption keys, mnemonics, or personal contact emails are tracked
 - hosted public pages and public APIs are read-only
 - hosted live write actions remain disabled unless server-only admin and wallet env vars are configured
-- CodeGuardian uses live 0G Chain evidence and labels storage/compute evidence as hybrid
-- `pnpm audit --prod --audit-level moderate` reports no known production vulnerabilities
+- CodeGuardian uses live 0G Chain, 0G Storage, and 0G Compute evidence; optional DA/ENS are explicitly labeled mock
+- `pnpm audit:prod` passes the moderate gate; `pnpm audit --prod` reports one low-severity advisory in a 0G broker transitive dependency path
 
 ## Fixes Applied
 
@@ -49,6 +49,10 @@ The secret linter now rejects tracked personal email addresses and tracked secre
 6. Reduced dependency audit surface.
 
 The repo no longer pins the Vercel CLI as a dev dependency, and the unused React Vite plugin was removed from the test config. A PostCSS override clears the production audit advisory inherited through Next.js.
+
+7. Overrode the vulnerable Axios production range.
+
+The 0G SDK dependency tree pulled an Axios advisory through `open-jsonrpc-provider`. A `pnpm.overrides` pin upgrades Axios to the patched production range.
 
 ## Contracts
 
@@ -95,7 +99,11 @@ Production:
 pnpm audit --prod --audit-level moderate
 ```
 
-Result: no known vulnerabilities found.
+Result: exits successfully with no moderate-or-higher production vulnerabilities.
+
+The broader production audit still reports one low-severity advisory:
+
+- `elliptic <=6.6.1` through `@0glabs/0g-serving-broker > circomlibjs > ethers > @ethersproject/signing-key`. There is no patched version listed in the advisory, and this path is not exposed to browser code.
 
 Development tooling:
 
