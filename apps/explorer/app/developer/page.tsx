@@ -5,8 +5,7 @@ export default function DeveloperPage() {
         <h1 className="text-4xl font-semibold">Developer SDK</h1>
         <p className="mt-4 max-w-2xl text-slate-400">
           Add Proof-of-Intelligence verification to any ERC-7857/iNFT-style
-          agent with adapters for chain, storage, compute, optional DA, and
-          optional ENS.
+          agent with adapters for chain, storage, compute, and optional DA.
         </p>
         <div className="mt-8 grid gap-6">
           {[

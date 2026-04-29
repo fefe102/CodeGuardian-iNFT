@@ -31,7 +31,7 @@ export function StatusHeader({ report }: { report: VerificationReport }) {
   const tone = report.status === "verified" ? "good" : report.status === "failed" ? "bad" : "warn";
   const sourceLabels = report.sources.map((source) =>
     source === "mock" && report.status === "verified"
-      ? "mock optional DA/ENS"
+      ? "mock optional layers"
       : source
   );
   return (
