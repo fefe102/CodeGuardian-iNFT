@@ -3,6 +3,18 @@
 Audit date: 2026-04-27  
 Scope: production-style UI pass for the hosted Next.js explorer, using the current CodeGuardian iNFT / AgentProof framing.
 
+## Resolution Update
+
+Updated 2026-05-01:
+
+- Trust-sensitive copy now distinguishes live chain from hybrid Storage/Compute evidence and no longer presents ENS as active prize scope.
+- Raw JSON is collapsed behind proof summaries on verification, replay, and certificate surfaces.
+- Replay pages now lead with event labels, human summaries, source badges, and key roots/IDs before raw JSON.
+- The homepage first viewport now includes a CodeGuardian operating proof pipeline with status, tier, latest run, roots, source labels, and FakeAgent as the negative control.
+- Create Passport now has visible wizard progress and copyable Passport URL / badge / manifest root outputs.
+- Evidence objects, memory roots, policy hashes, certificate roots, badge snippets, and Passport URLs now have explicit copy controls.
+- Admin remains reachable but is de-emphasized in primary navigation, and the certificate page now presents the certificate before the export controls.
+
 ## Summary Verdict
 
 The product is usable and substantially complete, but the UI still reads more like a dense proof dashboard than a polished startup-grade autonomous-agent product. The strongest surface is the CodeGuardian Agent Console: it proves the product can show an actual agent state, memory evolution, proof roots, runs, and certificates. The weakest surface is the first impression: the homepage and verifier lead with text and data rather than a clear visual proof of "this is a live autonomous iNFT agent."

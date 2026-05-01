@@ -28,6 +28,13 @@
 - [x] Minted iNFT proof cards and 0G evidence links surfaced in UI/docs
 - [x] Final `pnpm final:check`, `pnpm contracts:test`, security audit, Vercel redeploy, commit, and push
 - [x] ENS prize targeting explicitly deferred; current ENS support remains mock/compatibility only
+- [x] Trust-sensitive copy no longer overclaims live 0G Storage or active ENS scope
+- [x] Raw proof JSON is collapsed behind summaries
+- [x] Replay timeline is narrative-first with expandable canonical JSON
+- [x] Homepage first viewport shows CodeGuardian's operating proof pipeline
+- [x] Create Passport displays wizard progress and share outputs
+- [x] Roots, tx identifiers, badge snippets, and passport URLs have copy controls
+- [x] Admin nav is visually de-emphasized and certificate page is certificate-first
 
 ## Submission Constants
 

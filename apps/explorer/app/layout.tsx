@@ -17,9 +17,7 @@ const themeInitScript = `
       const stored = window.localStorage.getItem("poi-theme");
       const theme = stored === "light" || stored === "dark"
         ? stored
-        : window.matchMedia("(prefers-color-scheme: light)").matches
-          ? "light"
-          : "dark";
+        : "dark";
       document.documentElement.dataset.theme = theme;
       document.documentElement.style.colorScheme = theme;
     } catch {
@@ -52,12 +50,14 @@ export default function RootLayout({
               </span>
             </Link>
             <div className="app-shell-links">
+              <Link href="/agent/codeguardian/console">Agent Console</Link>
               <Link href="/verify">Verify</Link>
               <Link href="/create">Create Passport</Link>
-              <Link href="/agent/codeguardian/console">Agent Console</Link>
               <Link href="/agent/codeguardian">Proof</Link>
               <Link href="/developer">Developer</Link>
-              <Link href="/admin">Admin</Link>
+              <Link href="/admin" className="app-shell-secondary-link">
+                Admin
+              </Link>
             </div>
             <ThemeToggle />
           </nav>

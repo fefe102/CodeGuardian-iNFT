@@ -6,6 +6,7 @@ import {
   publicStatus,
   seededCodeGuardianTarget,
 } from "../lib/proof";
+import { CopyButton } from "../components/copy-button";
 import { Badge, TierLadder } from "../components/proof-ui";
 
 export default async function HomePage() {
@@ -15,6 +16,58 @@ export default async function HomePage() {
   ]);
   const status = publicStatus();
   const demoTarget = seededCodeGuardianTarget();
+  const codeguardianReport = codeguardian.report;
+  const proofObjectByName = new Map(
+    status.proofObjects.map((object) => [object.name, object]),
+  );
+  const proofPipeline = [
+    {
+      label: "0G iNFT",
+      value: `${demoTarget.contract} #${demoTarget.tokenId}`,
+      source: "live",
+    },
+    {
+      label: "Encrypted intelligence",
+      value:
+        proofObjectByName.get("intelligenceBundle")?.poiRoot ??
+        codeguardianReport.evidence.intelligenceBundleRoot ??
+        "missing",
+      source: proofObjectByName.get("intelligenceBundle")?.source ?? "hybrid",
+    },
+    {
+      label: "Persistent memory",
+      value:
+        proofObjectByName.get("memory")?.poiRoot ??
+        codeguardianReport.evidence.memoryRoot ??
+        "missing",
+      source: proofObjectByName.get("memory")?.source ?? "hybrid",
+    },
+    {
+      label: "Compute history",
+      value:
+        proofObjectByName.get("computeRuns")?.poiRoot ??
+        codeguardianReport.computeRuns?.runs.at(-1)?.id ??
+        "missing",
+      source: proofObjectByName.get("computeRuns")?.source ?? "hybrid",
+    },
+    {
+      label: "Replay trace",
+      value:
+        proofObjectByName.get("run")?.poiRoot ??
+        codeguardianReport.evidence.latestRunRoot ??
+        "missing",
+      source: proofObjectByName.get("run")?.source ?? "hybrid",
+    },
+    {
+      label: "Certificate",
+      value:
+        codeguardianReport.certificate?.certificateId ??
+        proofObjectByName.get("certificate")?.poiRoot ??
+        "missing",
+      source: proofObjectByName.get("certificate")?.source ?? "hybrid",
+    },
+  ];
+  const badgeEmbed = `[![Proof of Intelligence](${badgePath(demoTarget)})](${passportPath(demoTarget)})`;
 
   return (
     <main className="bg-ink text-white">
@@ -58,20 +111,43 @@ export default async function HomePage() {
               <div className="text-sm uppercase text-slate-500">
                 Public badge
               </div>
-              <code className="mt-2 block break-all text-xs text-emerald-200">
-                {`[![Proof of Intelligence](${badgePath(demoTarget)})](${passportPath(demoTarget)})`}
-              </code>
+              <div className="mt-2 flex flex-wrap items-start gap-2">
+                <code className="block min-w-0 flex-1 break-all text-xs text-emerald-200">
+                  {badgeEmbed}
+                </code>
+                <CopyButton value={badgeEmbed} label="Copy badge" />
+              </div>
             </div>
           </div>
 
           <div className="relative min-h-[420px] overflow-hidden rounded-md border border-white/10 bg-[#171917] p-6">
             <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-300 via-amber-300 to-transparent" />
             <div className="text-sm uppercase text-slate-500">
-              Live verifier readout
+              Agent operating proof
             </div>
-            <div className="mt-6 grid gap-8 md:grid-cols-2">
+            <div className="mt-5 grid gap-3 text-sm md:grid-cols-3">
+              <div className="rounded-md border border-white/10 bg-black/20 p-3">
+                <div className="text-slate-500">Status</div>
+                <div className="mt-1 font-semibold capitalize text-white">
+                  {codeguardianReport.status}
+                </div>
+              </div>
+              <div className="rounded-md border border-white/10 bg-black/20 p-3">
+                <div className="text-slate-500">Tier</div>
+                <div className="mt-1 font-semibold text-white">
+                  Tier {codeguardianReport.tier}
+                </div>
+              </div>
+              <div className="rounded-md border border-white/10 bg-black/20 p-3">
+                <div className="text-slate-500">Latest run</div>
+                <div className="mt-1 font-semibold text-white">
+                  {codeguardianReport.run?.runId ?? "codeguardian-run-003"}
+                </div>
+              </div>
+            </div>
+            <div className="mt-6 grid gap-8 md:grid-cols-[0.8fr_1.2fr]">
               <div>
-              <div className="text-3xl font-semibold">
+                <div className="text-3xl font-semibold">
                   CodeGuardian iNFT
                 </div>
                 <p className="mt-2 text-sm text-slate-400">
@@ -82,12 +158,36 @@ export default async function HomePage() {
                 </div>
               </div>
               <div>
-                <div className="text-3xl font-semibold">{fakeagent.name}</div>
-                <p className="mt-2 text-sm text-slate-400">
-                  {fakeagent.headline}
-                </p>
-                <div className="mt-6">
-                  <TierLadder tier={fakeagent.report.tier} />
+                <div className="text-sm uppercase text-slate-500">
+                  Proof pipeline
+                </div>
+                <div className="mt-3 space-y-3">
+                  {proofPipeline.map((item, index) => (
+                    <div
+                      key={item.label}
+                      className="grid gap-2 rounded-md border border-white/10 bg-black/20 p-3"
+                    >
+                      <div className="flex items-center justify-between gap-3">
+                        <div className="text-sm font-semibold text-white">
+                          {index + 1}. {item.label}
+                        </div>
+                        <Badge
+                          tone={
+                            item.source === "live"
+                              ? "good"
+                              : item.source === "hybrid"
+                                ? "warn"
+                                : "neutral"
+                          }
+                        >
+                          {item.source}
+                        </Badge>
+                      </div>
+                      <code className="block break-all text-xs text-emerald-200">
+                        {item.value}
+                      </code>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -112,6 +212,16 @@ export default async function HomePage() {
                     </Badge>
                   </div>
                 ))}
+              </div>
+              <div className="mt-5 text-sm uppercase text-slate-500">
+                Negative control
+              </div>
+              <div className="mt-2 flex flex-wrap items-center gap-3">
+                <span className="font-semibold text-white">{fakeagent.name}</span>
+                <span className="text-sm text-slate-400">
+                  {fakeagent.headline}
+                </span>
+                <Badge tone="bad">Tier {fakeagent.report.tier}</Badge>
               </div>
               <div className="mt-5 text-sm uppercase text-slate-500">
                 Latest run root

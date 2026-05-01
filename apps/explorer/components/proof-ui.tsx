@@ -5,6 +5,7 @@ import type {
   RunTrace,
   VerificationReport,
 } from "@poi/sdk";
+import { CopyButton } from "./copy-button";
 import { certificateRoot } from "../lib/proof";
 
 const tierLabels = [
@@ -299,7 +300,7 @@ export function EvidenceObjects({
       <div className="py-4">
         <div className="text-sm uppercase text-slate-500">0G evidence objects</div>
         <p className="mt-2 text-sm text-slate-400">
-          Roots are copyable. When a StorageScan deep link is unavailable, search the root or tx sequence on StorageScan.
+          Copy roots and tx identifiers into StorageScan when a direct deep link is unavailable.
         </p>
       </div>
       {objects.map((object) => (
@@ -314,13 +315,29 @@ export function EvidenceObjects({
             </Badge>
           </div>
           <div className="space-y-2">
-            <code className="block break-all text-xs text-emerald-200">{object.poiRoot}</code>
+            <div className="flex flex-wrap items-start gap-2">
+              <code className="block min-w-0 flex-1 break-all text-xs text-emerald-200">{object.poiRoot}</code>
+              <CopyButton value={object.poiRoot} label="Copy root" />
+            </div>
             {object.zeroGRootHash ? (
-              <code className="block break-all text-xs text-slate-400">{object.zeroGRootHash}</code>
+              <div className="flex flex-wrap items-start gap-2">
+                <code className="block min-w-0 flex-1 break-all text-xs text-slate-400">{object.zeroGRootHash}</code>
+                <CopyButton value={object.zeroGRootHash} label="Copy 0G" />
+              </div>
             ) : null}
             <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500">
-              {object.txHash ? <span className="break-all">tx {object.txHash}</span> : null}
-              {object.txSeq ? <span>seq {object.txSeq}</span> : null}
+              {object.txHash ? (
+                <span className="inline-flex max-w-full items-center gap-2">
+                  <span className="break-all">tx {object.txHash}</span>
+                  <CopyButton value={object.txHash} label="Copy tx" className="text-slate-200" />
+                </span>
+              ) : null}
+              {object.txSeq ? (
+                <span className="inline-flex items-center gap-2">
+                  <span>seq {object.txSeq}</span>
+                  <CopyButton value={String(object.txSeq)} label="Copy seq" className="text-slate-200" />
+                </span>
+              ) : null}
               {object.byteLength ? <span>{object.byteLength} bytes</span> : null}
             </div>
           </div>

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { CopyButton } from "../../../../components/copy-button";
 import {
   Badge,
   EvidenceObjects,
@@ -73,13 +74,23 @@ export default async function CodeGuardianConsolePage({
                 ["Token", minted.tokenId],
                 ["Owner", minted.owner ?? "unknown"],
                 ["Registry", minted.registry],
-                ["Certificate", minted.certificateRecordId],
-              ].map(([label, value]) => (
-                <div key={label}>
-                  <dt className="text-slate-500">{label}</dt>
-                  <dd className="break-all text-slate-200">{value}</dd>
-                </div>
-              ))}
+                ["Certificate", minted.certificateRecordId ?? "missing"],
+              ].map(([label, value]) => {
+                const stringValue = value ?? "missing";
+                return (
+                  <div key={label}>
+                    <dt className="text-slate-500">{label}</dt>
+                    <dd className="mt-1 flex flex-wrap items-start gap-2">
+                      <span className="min-w-0 flex-1 break-all text-slate-200">
+                        {stringValue}
+                      </span>
+                      {label === "Contract" || label === "Owner" || label === "Registry" ? (
+                        <CopyButton value={stringValue} label="Copy" />
+                      ) : null}
+                    </dd>
+                  </div>
+                );
+              })}
             </dl>
           </div>
 
@@ -216,12 +227,18 @@ export default async function CodeGuardianConsolePage({
                     <p className="mt-1 text-sm text-slate-500">
                       {item.memoryDelta}
                     </p>
-                    <code className="mt-3 block break-all text-xs text-emerald-200">
-                      memory {item.memoryRoot}
-                    </code>
-                    <code className="mt-1 block break-all text-xs text-slate-400">
-                      trace {item.traceRoot}
-                    </code>
+                    <div className="mt-3 flex flex-wrap items-start gap-2">
+                      <code className="block min-w-0 flex-1 break-all text-xs text-emerald-200">
+                        memory {item.memoryRoot}
+                      </code>
+                      <CopyButton value={item.memoryRoot} label="Copy memory" />
+                    </div>
+                    <div className="mt-2 flex flex-wrap items-start gap-2">
+                      <code className="block min-w-0 flex-1 break-all text-xs text-slate-400">
+                        trace {item.traceRoot}
+                      </code>
+                      <CopyButton value={item.traceRoot} label="Copy trace" />
+                    </div>
                   </div>
                 </div>
               ))}
@@ -266,12 +283,18 @@ export default async function CodeGuardianConsolePage({
               <p className="mt-3 text-slate-300">
                 {consoleState.policyUpgrade.reason}
               </p>
-              <code className="mt-4 block break-all text-xs text-slate-400">
-                old {consoleState.policyUpgrade.oldHash}
-              </code>
-              <code className="mt-1 block break-all text-xs text-emerald-200">
-                new {consoleState.policyUpgrade.newHash}
-              </code>
+              <div className="mt-4 flex flex-wrap items-start gap-2">
+                <code className="block min-w-0 flex-1 break-all text-xs text-slate-400">
+                  old {consoleState.policyUpgrade.oldHash}
+                </code>
+                <CopyButton value={consoleState.policyUpgrade.oldHash} label="Copy old" />
+              </div>
+              <div className="mt-2 flex flex-wrap items-start gap-2">
+                <code className="block min-w-0 flex-1 break-all text-xs text-emerald-200">
+                  new {consoleState.policyUpgrade.newHash}
+                </code>
+                <CopyButton value={consoleState.policyUpgrade.newHash} label="Copy new" />
+              </div>
             </section>
           ) : null}
 

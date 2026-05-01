@@ -31,6 +31,8 @@ describe("explorer app smoke tests", () => {
     expect(html).toContain("CodeGuardian iNFT");
     expect(html).toContain("Autonomous 0G code-review iNFT");
     expect(html).toContain("Open Agent Console");
+    expect(html).toContain("Agent operating proof");
+    expect(html).toContain("Proof pipeline");
   });
 
   it("verify page has arbitrary token form", async () => {
@@ -47,8 +49,10 @@ describe("explorer app smoke tests", () => {
       await CreatePage({ searchParams: Promise.resolve({}) }),
     );
     expect(html).toContain("Create Passport");
+    expect(html).toContain("Passport wizard");
     expect(html).toContain("Manifest root");
     expect(html).toContain("Badge embed");
+    expect(html).toContain("Copy badge");
   });
 
   it("CodeGuardian page renders high-tier verification", async () => {
@@ -70,6 +74,7 @@ describe("explorer app smoke tests", () => {
     expect(html).toContain("Memory evolution");
     expect(html).toContain("critic-loop");
     expect(html).toContain("Hybrid preview generated");
+    expect(html).toContain("Copy memory");
   });
 
   it("FakeAgent page renders failures", async () => {
@@ -118,6 +123,8 @@ describe("explorer app smoke tests", () => {
     );
     expect(html).toContain("Proof-of-Intelligence Certificate");
     expect(html).toContain("CodeGuardian");
+    expect(html).toContain("Certificate export");
+    expect(html).toContain("Copy memory");
   });
 
   it("dynamic passport page works", async () => {

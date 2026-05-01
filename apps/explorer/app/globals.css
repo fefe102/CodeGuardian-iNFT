@@ -153,6 +153,16 @@ code {
   color: var(--app-strong);
 }
 
+.app-shell-links a.app-shell-secondary-link {
+  color: var(--app-subtle);
+  opacity: 0.72;
+}
+
+.app-shell-links a.app-shell-secondary-link:hover {
+  color: var(--app-muted);
+  opacity: 1;
+}
+
 .theme-toggle {
   display: inline-flex;
   min-width: 5.6rem;
@@ -317,6 +327,11 @@ code {
 }
 
 @media print {
+  @page {
+    margin: 0.5in;
+    size: letter;
+  }
+
   .no-print {
     display: none !important;
   }
