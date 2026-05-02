@@ -39,6 +39,13 @@ export type PassportTarget = {
   manifestRoot?: string;
 };
 
+export type ChainTransactionRecord = {
+  label: string;
+  txHash: string;
+  source: "live";
+  explorerUrl: string;
+};
+
 export type AgentProfile = {
   slug: AgentSlug;
   name: string;
@@ -212,7 +219,34 @@ export function getProofObjects(): ProofObjectRecord[] {
 
 export function chainscanContractUrl() {
   const address = currentDemoInftAddress();
-  return address ? `https://chainscan-galileo.0g.ai/address/${address}` : "";
+  return address ? chainscanAddressUrl(address) : "";
+}
+
+export function chainscanRegistryUrl() {
+  const address = currentRegistryAddress();
+  return address ? chainscanAddressUrl(address) : "";
+}
+
+export function chainscanAddressUrl(address: string) {
+  return `https://chainscan-galileo.0g.ai/address/${address}`;
+}
+
+export function chainscanTxUrl(txHash: string) {
+  return `https://chainscan-galileo.0g.ai/tx/${txHash}`;
+}
+
+export function getChainTransactions(): ChainTransactionRecord[] {
+  const txHashes = Array.isArray(deployment.txHashes)
+    ? deployment.txHashes
+    : [];
+  return txHashes
+    .filter((txHash): txHash is string => typeof txHash === "string")
+    .map((txHash, index) => ({
+      label: `0G Chain write ${String(index + 1).padStart(2, "0")}`,
+      txHash,
+      source: "live",
+      explorerUrl: chainscanTxUrl(txHash),
+    }));
 }
 
 export function storageScanSearchUrl() {
@@ -239,6 +273,7 @@ export async function getCodeGuardianConsole() {
     policyUpgrade: getCodeGuardianPolicyUpgrade(),
     skillHashes: getCodeGuardianSkillHashes(),
     proofObjects: getProofObjects(),
+    chainTransactions: getChainTransactions(),
     mintedInft: {
       chain: "0G Galileo",
       chainId: currentChainId(),

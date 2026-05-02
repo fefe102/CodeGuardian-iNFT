@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { CopyButton } from "../../../components/copy-button";
 import {
+  ChainTransactions,
   CertificateView,
   EvidenceObjects,
   RawJsonDetails,
@@ -8,6 +9,7 @@ import {
 import {
   chainscanContractUrl,
   getCertificate,
+  getChainTransactions,
   getProofObjects,
   storageScanSearchUrl,
 } from "../../../lib/proof";
@@ -75,6 +77,9 @@ export default async function CertificatePage({ params }: { params: Promise<{ ce
             objects={getProofObjects()}
             storageScanUrl={storageScanSearchUrl()}
           />
+        </div>
+        <div className="no-print mt-8">
+          <ChainTransactions transactions={getChainTransactions()} />
         </div>
         <RawJsonDetails
           title="Raw certificate JSON"

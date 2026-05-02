@@ -2,6 +2,7 @@ import Link from "next/link";
 import { CopyButton } from "../../components/copy-button";
 import {
   Badge,
+  ChainTransactions,
   EvidenceObjects,
   TierLadder,
 } from "../../components/proof-ui";
@@ -287,6 +288,10 @@ export default async function JudgePage() {
           <EvidenceObjects
             objects={consoleState.proofObjects}
             storageScanUrl={storageScanSearchUrl()}
+          />
+
+          <ChainTransactions
+            transactions={consoleState.chainTransactions}
           />
 
           <section className="grid gap-5 md:grid-cols-2">

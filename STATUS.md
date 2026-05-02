@@ -35,6 +35,7 @@
 - [x] Homepage first viewport shows CodeGuardian's operating proof pipeline
 - [x] Create Passport displays wizard progress and share outputs
 - [x] Roots, tx identifiers, badge snippets, and passport URLs have copy controls
+- [x] 0G Chain transaction hashes are exposed as ChainScan links across proof pages
 - [x] Admin nav is visually de-emphasized and certificate page is certificate-first
 - [x] Judge Mode page added for prize-focused one-page review
 - [x] Submission copy reframed around 0G Agentic ID / ERC-7857-style iNFT semantics

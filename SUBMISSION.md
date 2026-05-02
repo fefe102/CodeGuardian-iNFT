@@ -127,6 +127,7 @@ Minted iNFT / Agentic ID:
 - Owner: `0x053B860f329C9e4549D23dc8Aadf1116b99F1233`
 - ChainScan: https://chainscan-galileo.0g.ai/address/0xa390c79f21a3b4f62f4797308f50f8ff9ea4f4c9
 - Passport: https://proof-of-intelligence-explorer.vercel.app/passport/16602/0xa390c79f21a3b4f62f4797308f50f8ff9ea4f4c9/1
+- 0G Chain tx proofs: 12 live Galileo transaction hashes are recorded in `deployments/0g-galileo.json` and exposed on Judge Mode, Agent Console, Passport, and Certificate pages as ChainScan links.
 
 Proof intelligence/memory embedded:
 - Manifest root: `sha256:098b7cc32da7fac1d514230617a404c59bfe80eaecac22c2ff612a8cc0089ba7`

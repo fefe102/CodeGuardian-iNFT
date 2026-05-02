@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import {
   AgentActions,
+  ChainTransactions,
   Checklist,
   EvidenceObjects,
   EvidencePanel,
@@ -9,6 +10,7 @@ import {
 } from "../../../components/proof-ui";
 import {
   getAgentProfile,
+  getChainTransactions,
   getProofObjects,
   storageScanSearchUrl,
 } from "../../../lib/proof";
@@ -71,10 +73,13 @@ export default async function AgentPage({
           </div>
           <Checklist report={report} />
           {agent === "codeguardian" ? (
-            <EvidenceObjects
-              objects={proofObjects}
-              storageScanUrl={storageScanSearchUrl()}
-            />
+            <>
+              <EvidenceObjects
+                objects={proofObjects}
+                storageScanUrl={storageScanSearchUrl()}
+              />
+              <ChainTransactions transactions={getChainTransactions()} />
+            </>
           ) : null}
           <EvidencePanel report={report} />
         </div>

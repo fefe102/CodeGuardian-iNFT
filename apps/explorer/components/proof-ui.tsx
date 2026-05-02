@@ -6,7 +6,7 @@ import type {
   VerificationReport,
 } from "@poi/sdk";
 import { CopyButton } from "./copy-button";
-import { certificateRoot } from "../lib/proof";
+import { certificateRoot, type ChainTransactionRecord } from "../lib/proof";
 
 const tierLabels = [
   "Unsupported",
@@ -346,6 +346,51 @@ export function EvidenceObjects({
             href={storageScanUrl}
           >
             StorageScan
+          </Link>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+export function ChainTransactions({
+  transactions,
+}: {
+  transactions: ChainTransactionRecord[];
+}) {
+  if (!transactions.length) return null;
+
+  return (
+    <div className="divide-y divide-white/10 border-y border-white/10">
+      <div className="py-4">
+        <div className="text-sm uppercase text-slate-500">
+          0G Chain transaction proofs
+        </div>
+        <p className="mt-2 text-sm text-slate-400">
+          Live Galileo writes recorded during contract deployment, demo iNFT
+          seeding, registry updates, and certificate issuance.
+        </p>
+      </div>
+      {transactions.map((transaction) => (
+        <div
+          key={transaction.txHash}
+          className="grid gap-3 py-4 md:grid-cols-[190px_1fr_130px] md:items-center"
+        >
+          <div>
+            <div className="font-medium text-white">{transaction.label}</div>
+            <Badge tone="good">{transaction.source}</Badge>
+          </div>
+          <div className="flex flex-wrap items-start gap-2">
+            <code className="block min-w-0 flex-1 break-all text-xs text-emerald-200">
+              {transaction.txHash}
+            </code>
+            <CopyButton value={transaction.txHash} label="Copy tx" />
+          </div>
+          <Link
+            className="rounded-md border border-white/15 px-3 py-2 text-center text-xs font-semibold text-white"
+            href={transaction.explorerUrl}
+          >
+            ChainScan tx
           </Link>
         </div>
       ))}

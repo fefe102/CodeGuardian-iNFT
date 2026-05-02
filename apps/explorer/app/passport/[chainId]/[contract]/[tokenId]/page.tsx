@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   AgentActions,
+  ChainTransactions,
   Checklist,
   EvidenceObjects,
   EvidencePanel,
@@ -10,6 +11,7 @@ import {
 } from "../../../../../components/proof-ui";
 import {
   badgePath,
+  getChainTransactions,
   getPassportForTarget,
   getProofObjects,
   parsePassportTarget,
@@ -87,10 +89,13 @@ export default async function PassportPage({
           <Checklist report={report} />
 
           {report.agent === "codeguardian" ? (
-            <EvidenceObjects
-              objects={getProofObjects()}
-              storageScanUrl={storageScanSearchUrl()}
-            />
+            <>
+              <EvidenceObjects
+                objects={getProofObjects()}
+                storageScanUrl={storageScanSearchUrl()}
+              />
+              <ChainTransactions transactions={getChainTransactions()} />
+            </>
           ) : null}
 
           <div className="grid gap-5 md:grid-cols-2">

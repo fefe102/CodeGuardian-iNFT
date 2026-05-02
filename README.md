@@ -30,6 +30,7 @@ AgentProof is the reusable verifier, SDK, CLI, registry, API, badge, and explore
 - Passport ID: `0x01212ca92791787ccb99c454d3b59c5596f90882c892c7fca3e63294a159430c`
 - Certificate record: `3`
 - ChainScan: https://chainscan-galileo.0g.ai/address/0xa390c79f21a3b4f62f4797308f50f8ff9ea4f4c9
+- 0G Chain tx proofs: 12 live Galileo transaction hashes are recorded in `deployments/0g-galileo.json` and exposed on Judge Mode, Agent Console, Passport, and Certificate pages as ChainScan links.
 
 ChainScan links to the contract page; token ID `1` is the CodeGuardian iNFT. Token-specific proof is available in the AgentProof passport page.
 
