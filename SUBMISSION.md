@@ -6,7 +6,7 @@
 
 CodeGuardian iNFT is an autonomous 0G Agentic ID / ERC-7857-style code-review agent with embedded encrypted intelligence, evolving persistent memory, compute-backed self-critique, replayable behavior traces, dynamic skill/policy upgrades, authorized execution semantics, and a Proof-of-Intelligence certificate.
 
-Supporting product/proof layer: **AgentProof - Proof-of-Intelligence Explorer for 0G iNFT agents**.
+Supporting product/proof layer: **AgentProof — Proof-of-Intelligence Explorer for 0G iNFT agents**.
 
 Winning frame: **CodeGuardian is the autonomous iNFT agent. AgentProof is how judges verify it is real.**
 
@@ -16,7 +16,7 @@ Winning frame: **CodeGuardian is the autonomous iNFT agent. AgentProof is how ju
 - Judge Mode: https://proof-of-intelligence-explorer.vercel.app/judge
 - Agent Console: https://proof-of-intelligence-explorer.vercel.app/agent/codeguardian/console
 - Safe diff review: https://proof-of-intelligence-explorer.vercel.app/agent/codeguardian/review
-- Public GitHub: https://github.com/fefe102/Proof-of-Intelligence-Explorer
+- Public GitHub: https://github.com/fefe102/CodeGuardian-iNFT
 - Demo video: added in ETHGlobal dashboard
 - Minted iNFT explorer link: https://chainscan-galileo.0g.ai/address/0xa390c79f21a3b4f62f4797308f50f8ff9ea4f4c9
 - CodeGuardian Passport: https://proof-of-intelligence-explorer.vercel.app/passport/16602/0xa390c79f21a3b4f62f4797308f50f8ff9ea4f4c9/1
@@ -93,6 +93,60 @@ FakeAgent is the negative control and remains low-tier because it lacks a valid 
 ## Team / Contact
 
 Provided in the ETHGlobal dashboard; omitted from the public repository.
+
+## ETHGlobal Submission Fields
+
+Project name:
+CodeGuardian iNFT
+
+Short description:
+CodeGuardian iNFT is an autonomous 0G iNFT code-review agent. Its embedded encrypted intelligence, evolving persistent memory, compute-backed critic loop, replayable behavior traces, dynamic policy upgrade, and Proof-of-Intelligence certificate are verified by AgentProof.
+
+Live demo:
+https://proof-of-intelligence-explorer.vercel.app
+
+Judge Mode:
+https://proof-of-intelligence-explorer.vercel.app/judge
+
+Public GitHub:
+https://github.com/fefe102/CodeGuardian-iNFT
+
+Demo video:
+Added in ETHGlobal dashboard.
+
+0G Chain:
+0G Galileo, chain ID `16602`
+
+Contract deployment addresses:
+- CodeGuardian iNFT contract: `0xa390c79f21a3b4f62f4797308f50f8ff9ea4f4c9`
+- Proof registry: `0x90d7f68cbf2a860f7b2c54548095fcb72d61b9af`
+
+Minted iNFT / Agentic ID:
+- Contract: `0xa390c79f21a3b4f62f4797308f50f8ff9ea4f4c9`
+- Token ID: `1`
+- Owner: `0x053B860f329C9e4549D23dc8Aadf1116b99F1233`
+- ChainScan: https://chainscan-galileo.0g.ai/address/0xa390c79f21a3b4f62f4797308f50f8ff9ea4f4c9
+- Passport: https://proof-of-intelligence-explorer.vercel.app/passport/16602/0xa390c79f21a3b4f62f4797308f50f8ff9ea4f4c9/1
+
+Proof intelligence/memory embedded:
+- Manifest root: `sha256:098b7cc32da7fac1d514230617a404c59bfe80eaecac22c2ff612a8cc0089ba7`
+- Encrypted intelligence root: `sha256:6289903e00f2e42448eb3cad30d322fcd4e1b3e3af54dd37f35a863a864f0bcd`
+- Latest memory root: `sha256:d559e2a8427d70dce884ecea72ae7678effa79e0d8b62178405495be9c57e5e1`
+- Latest run root: `sha256:61aeab5b75456fa20b010ddf61d5c7e8077641368085168aa446aaf62b13fafb`
+- Compute run IDs: `zg-hybrid-analysis-001`, `zg-hybrid-critic-001`, `zg-hybrid-analysis-002`, `zg-hybrid-critic-002`, `zg-live-analysis-95b970ef686e`, `zg-live-critic-69794555dda4`
+- Certificate ID: `poi-cert-codeguardian-001`
+- Certificate URL: https://proof-of-intelligence-explorer.vercel.app/certificate/poi-cert-codeguardian-001
+- 0G Storage tx sequences: manifest `68674`, intelligence `68661`, memory `68677`, run `68678`, compute bundle `68679`, certificate `68681`
+
+Protocol features used:
+- 0G Chain for iNFT / Agentic ID, registry, passport, and certificate roots.
+- 0G Storage for encrypted intelligence, memory, traces, compute bundle, and certificate proof objects.
+- 0G Compute for CodeGuardian analysis/critic evidence where configured/live; deterministic hybrid records are labeled honestly.
+- Optional 0G DA export support.
+- ENS is not targeted in this submission; existing hooks are mock/compatibility only.
+
+Team/contact info:
+Provided in ETHGlobal dashboard; omitted from public repository.
 
 ## Setup
 

@@ -3,7 +3,7 @@
 ## 1. Product Identity
 
 - ETHGlobal submission name: **CodeGuardian iNFT**
-- Supporting proof layer: **AgentProof - Proof-of-Intelligence Explorer for 0G iNFT agents**
+- Supporting proof layer: **AgentProof — Proof-of-Intelligence Explorer for 0G iNFT agents**
 - One-line pitch: CodeGuardian iNFT is an autonomous 0G Agentic ID / ERC-7857-style code-review agent with embedded encrypted intelligence, evolving persistent memory, compute-backed self-critique, replayable behavior traces, dynamic skill/policy upgrades, authorized execution semantics, and a public Proof-of-Intelligence certificate.
 - Winning frame: **CodeGuardian is the autonomous iNFT agent. AgentProof is how judges verify it is real.**
 - Primary sponsor target: 0G - Best Autonomous Agents, Swarms & iNFT Innovations

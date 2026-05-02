@@ -1,6 +1,7 @@
 {
   "name": "proof-of-intelligence-explorer",
   "version": "0.1.0",
+  "description": "CodeGuardian iNFT submission with AgentProof proof layer for 0G iNFT agents",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@10.33.2",

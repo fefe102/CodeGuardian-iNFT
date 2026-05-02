@@ -1,13 +1,13 @@
 # CodeGuardian iNFT
 
-**Powered by AgentProof - Proof-of-Intelligence Explorer for 0G Agentic ID / iNFT agents.**
+**Powered by AgentProof — Proof-of-Intelligence Explorer for 0G Agentic ID / iNFT agents.**
 
 CodeGuardian iNFT is an autonomous 0G Agentic ID / ERC-7857-style code-review agent. Its encrypted intelligence bundle is packaged as AES-256-GCM proof evidence, its memory evolves across certified runs, its critic loop is compute-backed or honestly hybrid-labeled, and every run is replayable through AgentProof.
 
 Winning frame: **CodeGuardian is the autonomous iNFT agent. AgentProof is how judges verify it is real.**
 
 - Live demo: https://proof-of-intelligence-explorer.vercel.app
-- Public GitHub: https://github.com/fefe102/Proof-of-Intelligence-Explorer
+- Public GitHub: https://github.com/fefe102/CodeGuardian-iNFT
 - Judge Mode: https://proof-of-intelligence-explorer.vercel.app/judge
 - Agent Console: https://proof-of-intelligence-explorer.vercel.app/agent/codeguardian/console
 - Safe diff review: https://proof-of-intelligence-explorer.vercel.app/agent/codeguardian/review

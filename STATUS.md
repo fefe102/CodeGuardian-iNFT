@@ -6,7 +6,7 @@
 - [x] `AGENTS.md` instructs future runs to read `SPEC.md` and `STATUS.md`
 - [x] `.env`, `.vercel`, generated wallets, keys, logs, and local build output are ignored
 - [x] `.env.example` and `SPEC.md` are tracked-safe public files
-- [x] Public GitHub URL validity checked from git remote
+- [x] Public GitHub URL updated in repo docs for `CodeGuardian-iNFT`
 - [x] Dynamic verification for arbitrary contract/token
 - [x] Dynamic public Passport page
 - [x] Create Passport flow
@@ -45,9 +45,9 @@
 ## Submission Constants
 
 - Submission name: `CodeGuardian iNFT`
-- Proof layer: `AgentProof - Proof-of-Intelligence Explorer`
+- Proof layer: `AgentProof — Proof-of-Intelligence Explorer`
 - Live demo: `https://proof-of-intelligence-explorer.vercel.app`
-- Public GitHub: `https://github.com/fefe102/Proof-of-Intelligence-Explorer`
+- Public GitHub: `https://github.com/fefe102/CodeGuardian-iNFT`
 - 0G Galileo chain ID: `16602`
 - CodeGuardian iNFT contract: `0xa390c79f21a3b4f62f4797308f50f8ff9ea4f4c9`
 - CodeGuardian token ID: `1`

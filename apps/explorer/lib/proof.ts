@@ -63,7 +63,7 @@ export function publicStatus() {
     app: "CodeGuardian iNFT",
     proofLayer:
       process.env.NEXT_PUBLIC_APP_NAME ??
-      "AgentProof - Proof-of-Intelligence Explorer",
+      "AgentProof — Proof-of-Intelligence Explorer",
     mode: modeLabel().toLowerCase(),
     liveWritesEnabled: liveWritesEnabled(),
     chainId: String(currentChainId()),
