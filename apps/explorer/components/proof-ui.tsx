@@ -394,6 +394,8 @@ export function RunTimeline({ run }: { run: RunTrace }) {
 }
 
 export function CertificateView({ certificate }: { certificate: Certificate }) {
+  const root = certificateRoot(certificate);
+
   return (
     <article className="bg-white p-8 text-[#121412] shadow-2xl print:shadow-none md:p-12">
       <div className="border-4 border-[#121412] p-8">
@@ -423,7 +425,14 @@ export function CertificateView({ certificate }: { certificate: Certificate }) {
         </dl>
         <div className="mt-8 break-all border-t border-[#121412]/20 pt-5 text-xs">
           <div className="font-semibold">Certificate root</div>
-          {certificateRoot(certificate)}
+          <div className="mt-2 flex flex-wrap items-start gap-2">
+            <code className="min-w-0 flex-1 break-all">{root}</code>
+            <CopyButton
+              value={root}
+              label="Copy root"
+              className="no-print border-[#121412]/20 text-[#121412] hover:border-[#121412]/60"
+            />
+          </div>
         </div>
       </div>
     </article>
