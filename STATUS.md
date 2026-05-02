@@ -13,7 +13,7 @@
 - [x] Public API for verify/passport/run/certificate/health
 - [x] Badge endpoint
 - [x] Existing Vercel production deployment
-- [x] Latest Vercel production deployment refreshed from a `.git`-less source copy on 2026-05-01
+- [x] Latest Vercel production deployment refreshed from a `.git`-less source copy on 2026-05-02
 
 ## Active Backlog
 
@@ -27,7 +27,7 @@
 - [x] CodeGuardian positive proof paths free of mock iNFT address
 - [x] ERC-7857-style iNFT root accessors, events, and contract tests
 - [x] Minted iNFT proof cards and 0G evidence links surfaced in UI/docs
-- [x] Final `pnpm final:check`, `pnpm contracts:test`, security audit, Vercel redeploy, commit, and push
+- [x] Final `pnpm final:check`, `pnpm contracts:test`, security audit, Vercel redeploy, and commit
 - [x] ENS prize targeting explicitly deferred; current ENS support remains mock/compatibility only
 - [x] Trust-sensitive copy no longer overclaims live 0G Storage or active ENS scope
 - [x] Raw proof JSON is collapsed behind summaries
