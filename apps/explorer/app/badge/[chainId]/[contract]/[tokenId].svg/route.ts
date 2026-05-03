@@ -17,9 +17,10 @@ export async function GET(
   let label = "Unknown";
   let color = "#64748b";
   try {
-    const report = await verifyPassportTarget(
-      parsePassportTarget(normalizeBadgeParams(await params, request.url)),
+    const target = parsePassportTarget(
+      normalizeBadgeParams(await params, request.url),
     );
+    const report = await verifyBadgeTarget(request.url, target);
     label = badgeStatusForTier(report.tier);
     color =
       report.tier >= 6 ? "#10b981" : report.tier >= 2 ? "#f59e0b" : "#ef4444";
@@ -42,8 +43,33 @@ export async function GET(
     headers: {
       "Content-Type": "image/svg+xml; charset=utf-8",
       "Cache-Control": "public, max-age=60",
+      "X-POI-Badge-Version": "path-and-api-fallback",
     },
   });
+}
+
+async function verifyBadgeTarget(
+  requestUrl: string,
+  target: ReturnType<typeof parsePassportTarget>,
+) {
+  try {
+    return await verifyPassportTarget(target);
+  } catch {
+    const verifyUrl = new URL("/api/verify", requestUrl);
+    verifyUrl.searchParams.set("chainId", String(target.chainId));
+    verifyUrl.searchParams.set("contract", target.contract);
+    verifyUrl.searchParams.set("tokenId", target.tokenId);
+    if (target.manifestRoot) {
+      verifyUrl.searchParams.set("manifestRoot", target.manifestRoot);
+    }
+    const response = await fetch(verifyUrl, { cache: "no-store" });
+    if (!response.ok) {
+      throw new Error("Badge verify API fallback failed");
+    }
+    return (await response.json()) as Awaited<
+      ReturnType<typeof verifyPassportTarget>
+    >;
+  }
 }
 
 function escapeXml(value: string) {
