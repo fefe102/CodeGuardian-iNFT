@@ -15,7 +15,7 @@
   },
   "publicChecks": [
     "GET /api/health returned ok with app CodeGuardian iNFT and proof layer Proof-of-Intelligence Explorer",
-    "GET /api/health returned certificate record 3, live 0G Chain, hybrid Storage/Compute, and mock DA/ENS labels",
+    "GET /api/health returned certificate record 4, live 0G Chain, live Storage objects, hybrid Compute, and mock DA/ENS labels",
     "GET /api/verify?agent=codeguardian returned tier 6 with token, manifest, and certificate bound to live iNFT 0xa390c79f21a3b4f62f4797308f50f8ff9ea4f4c9 #1",
     "GET /api/verify?agent=codeguardian labels ENS as mock compatibility metadata and not a targeted submission feature",
     "GET /api/verify?agent=fakeagent returned tier 1 with live token evidence and no CodeGuardian passport or certificate identifiers",

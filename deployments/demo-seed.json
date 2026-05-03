@@ -11,18 +11,18 @@
     "fakeagent": "2"
   },
   "passportId": "0x01212ca92791787ccb99c454d3b59c5596f90882c892c7fca3e63294a159430c",
-  "certificateId": "3",
+  "certificateId": "4",
   "agents": {
     "codeguardian": {
       "tier": 6,
       "status": "verified",
       "roots": {
-        "manifestRoot": "sha256:44d69c5206fad0ce2fc238fb11c50ae1f4b1ba63176a134236e3b91c2c96fe0a",
-        "intelligenceBundleRoot": "sha256:1c47d70c2c89e0d843c1b8501e98f5bd2354f7b03b994e1b819b2fbc54b87fd4",
-        "memoryRoot": "sha256:dc1e2df935e0db426cf1e0d3014142ebec59b2b917efdec5a5188d80a6774cdf",
-        "latestRunRoot": "sha256:b8524cf76c1dadae7405d7fec813c4c43c84f588a42f0ceff2a5e5a1345c2e30",
-        "checkpointRoot": "sha256:1327b28193e5cb885e332543c20bfeaafce555102f39e33b9bf5f491abd8d426",
-        "historyRoot": "sha256:43671740184c704a39f4f7c37bd4fc3d20befbc41713bfc9737cb1022b6cb5c4"
+        "manifestRoot": "sha256:228dab69761d19637632d73801a34d899064ce51f3ffd82d6fc182bb2432aee4",
+        "intelligenceBundleRoot": "sha256:6289903e00f2e42448eb3cad30d322fcd4e1b3e3af54dd37f35a863a864f0bcd",
+        "memoryRoot": "sha256:a2398bbb0b7b561c7fa891cf7a808f81991996cc1bce29b01dc0d6010ac11c72",
+        "latestRunRoot": "sha256:59f86560dcb00747fcb04368daeb8d0318f75ac4928180636db1e37e445362e9",
+        "checkpointRoot": "sha256:e397bbbff2aa81b1889f90cb749b8f70fee9791d0111192e49c79da51cebfbf1",
+        "historyRoot": "sha256:e4ba11b5c16faa78033c22d4f5b4ea7c3a129d5d9e007373c006de99c0707060"
       }
     },
     "fakeagent": {

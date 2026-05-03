@@ -28,23 +28,23 @@ AgentProof is the reusable verifier, SDK, CLI, registry, API, badge, and explore
 - Owner: `0x053B860f329C9e4549D23dc8Aadf1116b99F1233`
 - Proof registry: `0x90d7f68cbf2a860f7b2c54548095fcb72d61b9af`
 - Passport ID: `0x01212ca92791787ccb99c454d3b59c5596f90882c892c7fca3e63294a159430c`
-- Certificate record: `3`
+- Certificate record: `4`
 - ChainScan: https://chainscan-galileo.0g.ai/address/0xa390c79f21a3b4f62f4797308f50f8ff9ea4f4c9
-- 0G Chain tx proofs: 12 live Galileo transaction hashes are recorded in `deployments/0g-galileo.json` and exposed on Judge Mode, CodeGuardian profile, Agent Console, Passport, and Certificate pages as ChainScan links.
+- 0G Chain tx proofs: 15 live Galileo transaction hashes are recorded in `deployments/0g-galileo.json` and exposed on Judge Mode, CodeGuardian profile, Agent Console, Passport, and Certificate pages as ChainScan links.
 
 ChainScan links to the contract page; token ID `1` is the CodeGuardian iNFT. Token-specific proof is available in the AgentProof passport page.
 
 ## Proof Evidence
 
-- Manifest root: `sha256:098b7cc32da7fac1d514230617a404c59bfe80eaecac22c2ff612a8cc0089ba7`
+- Manifest root: `sha256:228dab69761d19637632d73801a34d899064ce51f3ffd82d6fc182bb2432aee4`
 - Encrypted intelligence root: `sha256:6289903e00f2e42448eb3cad30d322fcd4e1b3e3af54dd37f35a863a864f0bcd`
-- Latest memory root: `sha256:d559e2a8427d70dce884ecea72ae7678effa79e0d8b62178405495be9c57e5e1`
-- Latest run root: `sha256:61aeab5b75456fa20b010ddf61d5c7e8077641368085168aa446aaf62b13fafb`
-- Compute run IDs: `zg-hybrid-analysis-001`, `zg-hybrid-critic-001`, `zg-hybrid-analysis-002`, `zg-hybrid-critic-002`, `zg-live-analysis-95b970ef686e`, `zg-live-critic-69794555dda4`
+- Latest memory root: `sha256:a2398bbb0b7b561c7fa891cf7a808f81991996cc1bce29b01dc0d6010ac11c72`
+- Latest run root: `sha256:59f86560dcb00747fcb04368daeb8d0318f75ac4928180636db1e37e445362e9`
+- Compute run IDs: `zg-hybrid-analysis-001`, `zg-hybrid-critic-001`, `zg-hybrid-analysis-002`, `zg-hybrid-critic-002`, `zg-live-analysis-95bb0f30184d`, `zg-live-critic-a83aa740043a`
 - Certificate ID: `poi-cert-codeguardian-001`
-- 0G Storage tx hashes and sequences are exposed in the proof pages. Current tx sequences: manifest `68674`, intelligence `68661`, memory `68677`, run `68678`, compute bundle `68679`, certificate `68681`
+- 0G Storage tx hashes and sequences are exposed in the proof pages. Current tx sequences: manifest `76442`, intelligence `68661`, memory `76446`, run `76448`, compute bundle `76449`, certificate `76450`
 
-Current CodeGuardian evidence is live on 0G Chain and 0G Storage. Compute is honestly labeled `hybrid`: Runs 001-002 use deterministic hybrid records, and the latest Run 003 includes live 0G Compute analysis and critic records.
+Current CodeGuardian evidence is live on 0G Chain and 0G Storage. Compute is honestly labeled `hybrid`: Runs 001-002 use deterministic hybrid records, the compute bundle is live on 0G Storage, and the latest Run 003 includes live 0G Compute analysis and critic records.
 
 ## Autonomous Flow
 
@@ -218,7 +218,7 @@ flowchart LR
 
 ## Submission Scope
 
-- CodeGuardian's 0G Chain and 0G Storage evidence is live on Galileo; compute is labeled `hybrid` because Runs 001-002 are deterministic records and Run 003 has live 0G Compute records.
+- CodeGuardian's 0G Chain and 0G Storage evidence is live on Galileo. The compute bundle is live on 0G Storage. The latest Run 003 has live 0G Compute records, while Runs 001-002 remain deterministic hybrid history for memory evolution.
 - The public pasted-diff review is intentionally constrained: it reviews and hashes public text without cloning repositories, executing code, or sending transactions.
 - The hosted Create Passport flow generates deterministic proof previews; wallet-owned passport writes are the next production step.
 - Optional 0G DA support is export-only in this submission.

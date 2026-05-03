@@ -2,15 +2,15 @@
   "mode": "hybrid",
   "chainId": 16602,
   "runId": "codeguardian-run-003",
-  "memoryRoot": "sha256:d559e2a8427d70dce884ecea72ae7678effa79e0d8b62178405495be9c57e5e1",
-  "traceRoot": "sha256:61aeab5b75456fa20b010ddf61d5c7e8077641368085168aa446aaf62b13fafb",
+  "memoryRoot": "sha256:a2398bbb0b7b561c7fa891cf7a808f81991996cc1bce29b01dc0d6010ac11c72",
+  "traceRoot": "sha256:59f86560dcb00747fcb04368daeb8d0318f75ac4928180636db1e37e445362e9",
   "computeRunIds": [
     "zg-hybrid-analysis-001",
     "zg-hybrid-critic-001",
     "zg-hybrid-analysis-002",
     "zg-hybrid-critic-002",
-    "zg-live-analysis-95b970ef686e",
-    "zg-live-critic-69794555dda4"
+    "zg-live-analysis-95bb0f30184d",
+    "zg-live-critic-a83aa740043a"
   ],
   "run": {
     "schema": "poi-run/v0.1",
@@ -44,61 +44,62 @@
         "type": "compute_started",
         "at": "2026-04-26T00:20:02.000Z",
         "detail": {
-          "runId": "zg-live-analysis-95b970ef686e",
+          "runId": "zg-live-analysis-95bb0f30184d",
           "model": "qwen/qwen-2.5-7b-instruct",
           "provider": "0xa48f01287233509FD694a22Bf840225062E67836",
           "source": "live"
         },
-        "root": "sha256:c9452d4eeef2feb82c75c66c21a48c822e5d146a30ff9d75232840f1207543c3"
+        "root": "sha256:c00c50fcd3df275dd0f4ed2235fcc7d283ad83874862821c9dbd3e267a474740"
       },
       {
         "type": "compute_completed",
         "at": "2026-04-26T00:20:04.000Z",
         "detail": {
-          "runId": "zg-live-analysis-95b970ef686e",
-          "outputHash": "sha256:6a1e48b944f7802859571ab1ca5888c227398c134aa667583f12ef080e3f4cb8",
+          "runId": "zg-live-analysis-95bb0f30184d",
+          "outputHash": "sha256:3bd121aaf0db03f3c838b67f3aac34d0bde2cde27ef85eaecd4bbd762265e3a3",
           "source": "live"
         },
-        "root": "sha256:ec0a6e03980c38a51cf2c5adf2338e88aec62c303beb17df948d40203a64020a"
+        "root": "sha256:7f2601cdda8674b384f93ed16e4d92b8dceb0e44c4b25c0c3c93bbf94b81348f"
       },
       {
         "type": "issue_found",
         "at": "2026-04-26T00:20:05.000Z",
         "detail": {
-          "issue": "Unsafe JSON.parse path returns unvalidated data as a trusted Result.",
+          "issue": "A failed awaited side effect can escape without explicit classification or recovery.",
           "source": "live"
         },
-        "root": "sha256:6489198179b2838d04532f23e5cdcc752f6b39fb7803e2f0aa92a5b2bfe3e220"
+        "root": "sha256:2b546d01e4b7cdfbc240f5a1d74db1acef673203d6c102b63465b3841b00763a"
       },
       {
         "type": "patch_proposed",
         "at": "2026-04-26T00:20:07.000Z",
         "detail": {
-          "patch": "Parse JSON as unknown and validate the Result shape before returning it.",
+          "patch": "Wrap the awaited side effect in explicit error handling and return a typed failure result.",
+          "patchDiff": "diff --git a/examples/codeguardian/fixtures/unchecked-async-side-effect.ts b/examples/codeguardian/fixtures/unchecked-async-side-effect.ts\n@@\n export async function saveAuditResult(\n   id: string,\n   writeAudit: (id: string) => Promise<void>,\n ): Promise<SaveResult> {\n-  await writeAudit(id);\n+  try {\n+    await writeAudit(id);\n+  } catch (error) {\n+    return {\n+      ok: false,\n+      reason: error instanceof Error ? error.message : \"audit write failed\",\n+    };\n+  }\n   return { ok: true, id };\n }\n",
           "source": "live"
         },
-        "root": "sha256:1677a96abf72fe22d0e8782329af2fe7dbc0ec54ceb8256e33b0adc98f51c058"
+        "root": "sha256:9e6ddf3c4c850cbaadfa1e8fee0b65340a4bea1c2c07b0c87b4a9b6d62b7c225"
       },
       {
         "type": "critic_started",
         "at": "2026-04-26T00:20:08.000Z",
         "detail": {
-          "runId": "zg-live-critic-69794555dda4",
+          "runId": "zg-live-critic-a83aa740043a",
           "model": "qwen/qwen-2.5-7b-instruct",
           "provider": "0xa48f01287233509FD694a22Bf840225062E67836",
           "source": "live"
         },
-        "root": "sha256:82432a52bfd139b9d51b9ddcdf2194df96ecd3a702b9954565783beff3dd1a85"
+        "root": "sha256:5ea9658440d85a63159da84b27fe93b821c75e960e0d525e3176c7d2749cd529"
       },
       {
         "type": "critic_completed",
         "at": "2026-04-26T00:20:10.000Z",
         "detail": {
-          "critique": "The patch addresses the security concern by validating the JSON result shape after parsing. However, it's important to also consider potential errors during parsing and ensure that the validation process is robust. Additionally, handling cases where the input might not be valid JSON could prevent unexpected behavior or exceptions.",
+          "critique": "The patch addresses the issue by ensuring that any errors from awaited side effects are handled explicitly. However, it is important to provide more context on how the failure result will be used and ensure that the error handling is robust and clear. Consider adding detailed error messages and specifying the type of failure for better debugging and maintenance.",
           "accepted": true,
           "source": "live"
         },
-        "root": "sha256:df89c13b8738c473d49abb22c34c43cab5bbf658aef9ed275b8bd4de123f0cc3"
+        "root": "sha256:7397851581b6996029ef293c2ebf45fd44b4768da100180fc568e9fd6c9e4df1"
       },
       {
         "type": "memory_delta_created",
@@ -114,11 +115,11 @@
         "type": "memory_written",
         "at": "2026-04-26T00:20:12.000Z",
         "detail": {
-          "memoryRoot": "sha256:d559e2a8427d70dce884ecea72ae7678effa79e0d8b62178405495be9c57e5e1",
+          "memoryRoot": "sha256:a2398bbb0b7b561c7fa891cf7a808f81991996cc1bce29b01dc0d6010ac11c72",
           "version": 3,
           "source": "live"
         },
-        "root": "sha256:113d3164cc76b7b99b7e36d258ffe2286fbd6189ecda5abe22a35f35d40d0136"
+        "root": "sha256:fe1d87882ccd73f857c6b36d40b5fb5bbdec05e16bfa4051246333b566a6738a"
       },
       {
         "type": "skill_upgrade_checked",
@@ -133,10 +134,10 @@
         "type": "trace_committed",
         "at": "2026-04-26T00:20:14.000Z",
         "detail": {
-          "traceRoot": "sha256:21f8acdf5fe40a013a0b7c989c42173e9ed60a7f739a1be236338511c2bfe12b",
+          "traceRoot": "sha256:655cb96747a2141f62ddc78a16e4b2c39fd5a80e413358bc40ba7bdc125f3c7c",
           "source": "live"
         },
-        "root": "sha256:c7e2584be70f9c4dac7578277d4de428936d23d72e6d09c2a6f932cb0c6eb9af"
+        "root": "sha256:a4379af2343b21fafd3a5f641b65c169a6efa14b7fe8ea6449b5b299405680ba"
       },
       {
         "type": "certificate_issued",
@@ -149,11 +150,12 @@
       }
     ],
     "result": {
-      "issue": "Unsafe JSON.parse path returns unvalidated data as a trusted Result.",
-      "patch": "Parse JSON as unknown and validate the Result shape before returning it.",
-      "critique": "The patch addresses the security concern by validating the JSON result shape after parsing. However, it's important to also consider potential errors during parsing and ensure that the validation process is robust. Additionally, handling cases where the input might not be valid JSON could prevent unexpected behavior or exceptions.",
+      "issue": "A failed awaited side effect can escape without explicit classification or recovery.",
+      "patch": "Wrap the awaited side effect in explicit error handling and return a typed failure result.",
+      "patchDiff": "diff --git a/examples/codeguardian/fixtures/unchecked-async-side-effect.ts b/examples/codeguardian/fixtures/unchecked-async-side-effect.ts\n@@\n export async function saveAuditResult(\n   id: string,\n   writeAudit: (id: string) => Promise<void>,\n ): Promise<SaveResult> {\n-  await writeAudit(id);\n+  try {\n+    await writeAudit(id);\n+  } catch (error) {\n+    return {\n+      ok: false,\n+      reason: error instanceof Error ? error.message : \"audit write failed\",\n+    };\n+  }\n   return { ok: true, id };\n }\n",
+      "critique": "The patch addresses the issue by ensuring that any errors from awaited side effects are handled explicitly. However, it is important to provide more context on how the failure result will be used and ensure that the error handling is robust and clear. Consider adding detailed error messages and specifying the type of failure for better debugging and maintenance.",
       "accepted": true,
-      "memoryRoot": "sha256:d559e2a8427d70dce884ecea72ae7678effa79e0d8b62178405495be9c57e5e1"
+      "memoryRoot": "sha256:a2398bbb0b7b561c7fa891cf7a808f81991996cc1bce29b01dc0d6010ac11c72"
     }
   },
   "runs": [
@@ -201,10 +203,10 @@
           "at": "2026-04-26T00:00:04.000Z",
           "detail": {
             "runId": "zg-hybrid-analysis-001",
-            "outputHash": "sha256:9a1fcd05686fe6fbc69b572054a3fdc36cb67ef817fdb93a3ed40a0274e4e84f",
+            "outputHash": "sha256:be5b3003c68d22c78d13ef0d753f88323eb71f3e40ba9a97b67de5b23e3cbef6",
             "source": "hybrid"
           },
-          "root": "sha256:50b32d1dd1b1f8b55d70ddd6b045a0e74ab013b752e5e6b3083a5c78a6b231e3"
+          "root": "sha256:b474f58c1363c699c5b76d5f2b34d05a7ac10551b13d3a3730da37ea62fcb9bb"
         },
         {
           "type": "issue_found",
@@ -220,9 +222,10 @@
           "at": "2026-04-26T00:00:07.000Z",
           "detail": {
             "patch": "Parse JSON as unknown, validate the object shape, and return null for invalid payloads before constructing Result.",
+            "patchDiff": "diff --git a/examples/codeguardian/fixtures/unsafe-parser.ts b/examples/codeguardian/fixtures/unsafe-parser.ts\n@@\n+function isResult(value: unknown): value is Result {\n+  return (\n+    typeof value === \"object\" &&\n+    value !== null &&\n+    typeof (value as Result).ok === \"boolean\" &&\n+    typeof (value as Result).value === \"string\"\n+  );\n+}\n+\n export function parseResult(raw: string): Result {\n-  return JSON.parse(raw) as Result;\n+  const parsed: unknown = JSON.parse(raw);\n+  if (!isResult(parsed)) {\n+    throw new Error(\"invalid result payload\");\n+  }\n+  return parsed;\n }\n",
             "source": "hybrid"
           },
-          "root": "sha256:870b2cd2303643f95e23c5a81ede5678c7e8c44b881abde49614365942350b82"
+          "root": "sha256:8bc40d95cc68b51a4638ae7951ca843f3e34f99bd6bdaa29ca526d8986d76936"
         },
         {
           "type": "critic_started",
@@ -278,10 +281,10 @@
           "type": "trace_committed",
           "at": "2026-04-26T00:00:14.000Z",
           "detail": {
-            "traceRoot": "sha256:a69f6c4372170f72773c41a4b99e8ca02bb3aa4beb75f70e858629f77b18c412",
+            "traceRoot": "sha256:5157e4d713781a2b08fba1012a38ba2483196e2ae935b458ea6a3f06c5626f0c",
             "source": "hybrid"
           },
-          "root": "sha256:dd9e24f11093eb631a0cb0901bb02e9e77d9f59d32227a812111fd216023545e"
+          "root": "sha256:157ee1da7bb468f9e689fb1c91bdec6c2491f43b3274a0b4272dbe2407b2f9fb"
         },
         {
           "type": "certificate_issued",
@@ -296,6 +299,7 @@
       "result": {
         "issue": "Unsafe JSON.parse path returns unvalidated data as a trusted Result.",
         "patch": "Parse JSON as unknown, validate the object shape, and return null for invalid payloads before constructing Result.",
+        "patchDiff": "diff --git a/examples/codeguardian/fixtures/unsafe-parser.ts b/examples/codeguardian/fixtures/unsafe-parser.ts\n@@\n+function isResult(value: unknown): value is Result {\n+  return (\n+    typeof value === \"object\" &&\n+    value !== null &&\n+    typeof (value as Result).ok === \"boolean\" &&\n+    typeof (value as Result).value === \"string\"\n+  );\n+}\n+\n export function parseResult(raw: string): Result {\n-  return JSON.parse(raw) as Result;\n+  const parsed: unknown = JSON.parse(raw);\n+  if (!isResult(parsed)) {\n+    throw new Error(\"invalid result payload\");\n+  }\n+  return parsed;\n }\n",
         "critique": "The patch is bounded, keeps the public API stable, and converts an unsafe cast into explicit validation.",
         "accepted": true,
         "memoryRoot": "sha256:b71a518d1fadea56c7f0838e9fbd1c6a46bc043995a461f3d282ebf29b81e879"
@@ -345,10 +349,10 @@
           "at": "2026-04-26T00:10:04.000Z",
           "detail": {
             "runId": "zg-hybrid-analysis-002",
-            "outputHash": "sha256:0fc7f9c98d376ad7579d64dbc89492a72bf8635dd1f5645509e11a14db449991",
+            "outputHash": "sha256:52a61a030d9a99fd63a37ec5ae502438733a389b90c583f28606f3d17eef2e4d",
             "source": "hybrid"
           },
-          "root": "sha256:b07127c4ad43edd21abb39229a171e5e4e9110f9c2d06fbe68820ca25cad23a0"
+          "root": "sha256:9a94f02663d08258a2a37fe07d0cb67f6c21f1f2d5553a1036b0e7d810b8d398"
         },
         {
           "type": "issue_found",
@@ -364,9 +368,10 @@
           "at": "2026-04-26T00:10:07.000Z",
           "detail": {
             "patch": "Check authorization before reading or returning private records, and fail closed when ownership cannot be proven.",
+            "patchDiff": "diff --git a/examples/codeguardian/fixtures/missing-auth-guard.ts b/examples/codeguardian/fixtures/missing-auth-guard.ts\n@@\n export async function loadPrivateRecord(\n   callerAccountId: string,\n   requestedAccountId: string,\n   readRecord: (accountId: string) => Promise<PrivateRecord>,\n   canRead: (caller: string, requested: string) => Promise<boolean>,\n ) {\n+  if (!(await canRead(callerAccountId, requestedAccountId))) {\n+    return null;\n+  }\n  const record = await readRecord(requestedAccountId);\n-  if (!(await canRead(callerAccountId, requestedAccountId))) {\n-    return null;\n-  }\n   return record;\n }\n",
             "source": "hybrid"
           },
-          "root": "sha256:7e7b32ca9a6faaf73b05580e94eb32f61c8fe86c9662d6cd29098d32ad7868f8"
+          "root": "sha256:3f50ab0a11fd635703632252d5bf45f5c069220f4add980e487e3f047232260a"
         },
         {
           "type": "critic_started",
@@ -431,10 +436,10 @@
           "type": "trace_committed",
           "at": "2026-04-26T00:10:14.000Z",
           "detail": {
-            "traceRoot": "sha256:90271aa056e32e7383e9bcda3a8f6cdb532b5b510e7bf44177a1d6143e475666",
+            "traceRoot": "sha256:0b1397e29e41dd2e2738c8ffdbb2ac027f8bae46173a763c79cee8a769418ad4",
             "source": "hybrid"
           },
-          "root": "sha256:2a27be07bbc41b2399088f433ea59c92b98c9344b1075ea66dc45a309d2436a7"
+          "root": "sha256:81ea1587eadea4d141e064565a2a61683b7b90bc6051aae579623c9eb521f3f9"
         },
         {
           "type": "certificate_issued",
@@ -449,6 +454,7 @@
       "result": {
         "issue": "Private records can be returned before verifying the caller owns the account.",
         "patch": "Check authorization before reading or returning private records, and fail closed when ownership cannot be proven.",
+        "patchDiff": "diff --git a/examples/codeguardian/fixtures/missing-auth-guard.ts b/examples/codeguardian/fixtures/missing-auth-guard.ts\n@@\n export async function loadPrivateRecord(\n   callerAccountId: string,\n   requestedAccountId: string,\n   readRecord: (accountId: string) => Promise<PrivateRecord>,\n   canRead: (caller: string, requested: string) => Promise<boolean>,\n ) {\n+  if (!(await canRead(callerAccountId, requestedAccountId))) {\n+    return null;\n+  }\n  const record = await readRecord(requestedAccountId);\n-  if (!(await canRead(callerAccountId, requestedAccountId))) {\n-    return null;\n-  }\n   return record;\n }\n",
         "critique": "The fix moves authorization ahead of disclosure and preserves the function's narrow data access boundary.",
         "accepted": true,
         "memoryRoot": "sha256:568cb2b7f31804eef4dbe0231c5bb82ffb3e669a4a726943bc7e6d8c4f835ba2",
@@ -495,61 +501,62 @@
           "type": "compute_started",
           "at": "2026-04-26T00:20:02.000Z",
           "detail": {
-            "runId": "zg-live-analysis-95b970ef686e",
+            "runId": "zg-live-analysis-95bb0f30184d",
             "model": "qwen/qwen-2.5-7b-instruct",
             "provider": "0xa48f01287233509FD694a22Bf840225062E67836",
             "source": "live"
           },
-          "root": "sha256:c9452d4eeef2feb82c75c66c21a48c822e5d146a30ff9d75232840f1207543c3"
+          "root": "sha256:c00c50fcd3df275dd0f4ed2235fcc7d283ad83874862821c9dbd3e267a474740"
         },
         {
           "type": "compute_completed",
           "at": "2026-04-26T00:20:04.000Z",
           "detail": {
-            "runId": "zg-live-analysis-95b970ef686e",
-            "outputHash": "sha256:6a1e48b944f7802859571ab1ca5888c227398c134aa667583f12ef080e3f4cb8",
+            "runId": "zg-live-analysis-95bb0f30184d",
+            "outputHash": "sha256:3bd121aaf0db03f3c838b67f3aac34d0bde2cde27ef85eaecd4bbd762265e3a3",
             "source": "live"
           },
-          "root": "sha256:ec0a6e03980c38a51cf2c5adf2338e88aec62c303beb17df948d40203a64020a"
+          "root": "sha256:7f2601cdda8674b384f93ed16e4d92b8dceb0e44c4b25c0c3c93bbf94b81348f"
         },
         {
           "type": "issue_found",
           "at": "2026-04-26T00:20:05.000Z",
           "detail": {
-            "issue": "Unsafe JSON.parse path returns unvalidated data as a trusted Result.",
+            "issue": "A failed awaited side effect can escape without explicit classification or recovery.",
             "source": "live"
           },
-          "root": "sha256:6489198179b2838d04532f23e5cdcc752f6b39fb7803e2f0aa92a5b2bfe3e220"
+          "root": "sha256:2b546d01e4b7cdfbc240f5a1d74db1acef673203d6c102b63465b3841b00763a"
         },
         {
           "type": "patch_proposed",
           "at": "2026-04-26T00:20:07.000Z",
           "detail": {
-            "patch": "Parse JSON as unknown and validate the Result shape before returning it.",
+            "patch": "Wrap the awaited side effect in explicit error handling and return a typed failure result.",
+            "patchDiff": "diff --git a/examples/codeguardian/fixtures/unchecked-async-side-effect.ts b/examples/codeguardian/fixtures/unchecked-async-side-effect.ts\n@@\n export async function saveAuditResult(\n   id: string,\n   writeAudit: (id: string) => Promise<void>,\n ): Promise<SaveResult> {\n-  await writeAudit(id);\n+  try {\n+    await writeAudit(id);\n+  } catch (error) {\n+    return {\n+      ok: false,\n+      reason: error instanceof Error ? error.message : \"audit write failed\",\n+    };\n+  }\n   return { ok: true, id };\n }\n",
             "source": "live"
           },
-          "root": "sha256:1677a96abf72fe22d0e8782329af2fe7dbc0ec54ceb8256e33b0adc98f51c058"
+          "root": "sha256:9e6ddf3c4c850cbaadfa1e8fee0b65340a4bea1c2c07b0c87b4a9b6d62b7c225"
         },
         {
           "type": "critic_started",
           "at": "2026-04-26T00:20:08.000Z",
           "detail": {
-            "runId": "zg-live-critic-69794555dda4",
+            "runId": "zg-live-critic-a83aa740043a",
             "model": "qwen/qwen-2.5-7b-instruct",
             "provider": "0xa48f01287233509FD694a22Bf840225062E67836",
             "source": "live"
           },
-          "root": "sha256:82432a52bfd139b9d51b9ddcdf2194df96ecd3a702b9954565783beff3dd1a85"
+          "root": "sha256:5ea9658440d85a63159da84b27fe93b821c75e960e0d525e3176c7d2749cd529"
         },
         {
           "type": "critic_completed",
           "at": "2026-04-26T00:20:10.000Z",
           "detail": {
-            "critique": "The patch addresses the security concern by validating the JSON result shape after parsing. However, it's important to also consider potential errors during parsing and ensure that the validation process is robust. Additionally, handling cases where the input might not be valid JSON could prevent unexpected behavior or exceptions.",
+            "critique": "The patch addresses the issue by ensuring that any errors from awaited side effects are handled explicitly. However, it is important to provide more context on how the failure result will be used and ensure that the error handling is robust and clear. Consider adding detailed error messages and specifying the type of failure for better debugging and maintenance.",
             "accepted": true,
             "source": "live"
           },
-          "root": "sha256:df89c13b8738c473d49abb22c34c43cab5bbf658aef9ed275b8bd4de123f0cc3"
+          "root": "sha256:7397851581b6996029ef293c2ebf45fd44b4768da100180fc568e9fd6c9e4df1"
         },
         {
           "type": "memory_delta_created",
@@ -565,11 +572,11 @@
           "type": "memory_written",
           "at": "2026-04-26T00:20:12.000Z",
           "detail": {
-            "memoryRoot": "sha256:d559e2a8427d70dce884ecea72ae7678effa79e0d8b62178405495be9c57e5e1",
+            "memoryRoot": "sha256:a2398bbb0b7b561c7fa891cf7a808f81991996cc1bce29b01dc0d6010ac11c72",
             "version": 3,
             "source": "live"
           },
-          "root": "sha256:113d3164cc76b7b99b7e36d258ffe2286fbd6189ecda5abe22a35f35d40d0136"
+          "root": "sha256:fe1d87882ccd73f857c6b36d40b5fb5bbdec05e16bfa4051246333b566a6738a"
         },
         {
           "type": "skill_upgrade_checked",
@@ -584,10 +591,10 @@
           "type": "trace_committed",
           "at": "2026-04-26T00:20:14.000Z",
           "detail": {
-            "traceRoot": "sha256:21f8acdf5fe40a013a0b7c989c42173e9ed60a7f739a1be236338511c2bfe12b",
+            "traceRoot": "sha256:655cb96747a2141f62ddc78a16e4b2c39fd5a80e413358bc40ba7bdc125f3c7c",
             "source": "live"
           },
-          "root": "sha256:c7e2584be70f9c4dac7578277d4de428936d23d72e6d09c2a6f932cb0c6eb9af"
+          "root": "sha256:a4379af2343b21fafd3a5f641b65c169a6efa14b7fe8ea6449b5b299405680ba"
         },
         {
           "type": "certificate_issued",
@@ -600,11 +607,12 @@
         }
       ],
       "result": {
-        "issue": "Unsafe JSON.parse path returns unvalidated data as a trusted Result.",
-        "patch": "Parse JSON as unknown and validate the Result shape before returning it.",
-        "critique": "The patch addresses the security concern by validating the JSON result shape after parsing. However, it's important to also consider potential errors during parsing and ensure that the validation process is robust. Additionally, handling cases where the input might not be valid JSON could prevent unexpected behavior or exceptions.",
+        "issue": "A failed awaited side effect can escape without explicit classification or recovery.",
+        "patch": "Wrap the awaited side effect in explicit error handling and return a typed failure result.",
+        "patchDiff": "diff --git a/examples/codeguardian/fixtures/unchecked-async-side-effect.ts b/examples/codeguardian/fixtures/unchecked-async-side-effect.ts\n@@\n export async function saveAuditResult(\n   id: string,\n   writeAudit: (id: string) => Promise<void>,\n ): Promise<SaveResult> {\n-  await writeAudit(id);\n+  try {\n+    await writeAudit(id);\n+  } catch (error) {\n+    return {\n+      ok: false,\n+      reason: error instanceof Error ? error.message : \"audit write failed\",\n+    };\n+  }\n   return { ok: true, id };\n }\n",
+        "critique": "The patch addresses the issue by ensuring that any errors from awaited side effects are handled explicitly. However, it is important to provide more context on how the failure result will be used and ensure that the error handling is robust and clear. Consider adding detailed error messages and specifying the type of failure for better debugging and maintenance.",
         "accepted": true,
-        "memoryRoot": "sha256:d559e2a8427d70dce884ecea72ae7678effa79e0d8b62178405495be9c57e5e1"
+        "memoryRoot": "sha256:a2398bbb0b7b561c7fa891cf7a808f81991996cc1bce29b01dc0d6010ac11c72"
       }
     }
   ],
@@ -613,8 +621,8 @@
     "agent": "CodeGuardian",
     "checkpoint": {
       "runCount": 3,
-      "lastFinding": "Unsafe JSON.parse path returns unvalidated data as a trusted Result.",
-      "stateRoot": "sha256:549ccf18e07b31d770ae81d5de2d74f4ced166ed774c299ad1a9f532e03d2727"
+      "lastFinding": "A failed awaited side effect can escape without explicit classification or recovery.",
+      "stateRoot": "sha256:3dabc9a40db6684505793bbe2c13cbf91907db339c26472f84bf454bceefca16"
     },
     "history": [
       {
@@ -640,7 +648,7 @@
       {
         "runId": "codeguardian-run-003",
         "version": 3,
-        "summary": "Unsafe JSON.parse path returns unvalidated data as a trusted Result.",
+        "summary": "A failed awaited side effect can escape without explicit classification or recovery.",
         "learnedPattern": "Wrap awaited side effects in explicit error handling.",
         "memoryDelta": "Added an async side-effect handling pattern to persistent review memory.",
         "at": "2026-04-26T00:20:00.000Z",
@@ -707,8 +715,8 @@
       "agent": "CodeGuardian",
       "checkpoint": {
         "runCount": 3,
-        "lastFinding": "Unsafe JSON.parse path returns unvalidated data as a trusted Result.",
-        "stateRoot": "sha256:549ccf18e07b31d770ae81d5de2d74f4ced166ed774c299ad1a9f532e03d2727"
+        "lastFinding": "A failed awaited side effect can escape without explicit classification or recovery.",
+        "stateRoot": "sha256:3dabc9a40db6684505793bbe2c13cbf91907db339c26472f84bf454bceefca16"
       },
       "history": [
         {
@@ -734,7 +742,7 @@
         {
           "runId": "codeguardian-run-003",
           "version": 3,
-          "summary": "Unsafe JSON.parse path returns unvalidated data as a trusted Result.",
+          "summary": "A failed awaited side effect can escape without explicit classification or recovery.",
           "learnedPattern": "Wrap awaited side effects in explicit error handling.",
           "memoryDelta": "Added an async side-effect handling pattern to persistent review memory.",
           "at": "2026-04-26T00:20:00.000Z",
@@ -751,7 +759,7 @@
       "learnedPattern": "Validate JSON parse failures before using parsed payloads.",
       "memoryDelta": "Added a JSON-shape validation heuristic to future reviews.",
       "memoryRoot": "sha256:b71a518d1fadea56c7f0838e9fbd1c6a46bc043995a461f3d282ebf29b81e879",
-      "traceRoot": "sha256:a69f6c4372170f72773c41a4b99e8ca02bb3aa4beb75f70e858629f77b18c412",
+      "traceRoot": "sha256:5157e4d713781a2b08fba1012a38ba2483196e2ae935b458ea6a3f06c5626f0c",
       "source": "hybrid"
     },
     {
@@ -760,7 +768,7 @@
       "learnedPattern": "Verify authorization before returning private records.",
       "memoryDelta": "Added an authorization-check heuristic to critic reviews.",
       "memoryRoot": "sha256:568cb2b7f31804eef4dbe0231c5bb82ffb3e669a4a726943bc7e6d8c4f835ba2",
-      "traceRoot": "sha256:90271aa056e32e7383e9bcda3a8f6cdb532b5b510e7bf44177a1d6143e475666",
+      "traceRoot": "sha256:0b1397e29e41dd2e2738c8ffdbb2ac027f8bae46173a763c79cee8a769418ad4",
       "source": "hybrid"
     },
     {
@@ -768,8 +776,8 @@
       "version": 3,
       "learnedPattern": "Wrap awaited side effects in explicit error handling.",
       "memoryDelta": "Added an async side-effect handling pattern to persistent review memory.",
-      "memoryRoot": "sha256:d559e2a8427d70dce884ecea72ae7678effa79e0d8b62178405495be9c57e5e1",
-      "traceRoot": "sha256:21f8acdf5fe40a013a0b7c989c42173e9ed60a7f739a1be236338511c2bfe12b",
+      "memoryRoot": "sha256:a2398bbb0b7b561c7fa891cf7a808f81991996cc1bce29b01dc0d6010ac11c72",
+      "traceRoot": "sha256:655cb96747a2141f62ddc78a16e4b2c39fd5a80e413358bc40ba7bdc125f3c7c",
       "source": "live"
     }
   ],
@@ -782,14 +790,14 @@
         "id": "zg-hybrid-analysis-001",
         "type": "analysis",
         "promptHash": "sha256:a1395afc1da06ab4c6659e41cde99aadc667081505c9deeedb21344e60fcfcb9",
-        "outputHash": "sha256:9a1fcd05686fe6fbc69b572054a3fdc36cb67ef817fdb93a3ed40a0274e4e84f",
+        "outputHash": "sha256:be5b3003c68d22c78d13ef0d753f88323eb71f3e40ba9a97b67de5b23e3cbef6",
         "at": "2026-04-26T00:00:04.000Z",
         "source": "hybrid"
       },
       {
         "id": "zg-hybrid-critic-001",
         "type": "critic",
-        "promptHash": "sha256:1b60d695d09eb381f0bf4468110b0cd3222e4deac5bf4abe45e16d5b250fe0f0",
+        "promptHash": "sha256:61e7c42804e74757c991baa39e2028aaa09090dacfb6ba5e89c0a68e4398f6b3",
         "outputHash": "sha256:79be7837b8660e70999b1243f11ce556498495b1b246b926af8703622e7d9bdf",
         "at": "2026-04-26T00:00:10.000Z",
         "source": "hybrid"
@@ -798,31 +806,31 @@
         "id": "zg-hybrid-analysis-002",
         "type": "analysis",
         "promptHash": "sha256:0c1d5bbb88f8a6fc3e3aa626b18e9607741d3396ce86df3b4e3e360e2ea6b420",
-        "outputHash": "sha256:0fc7f9c98d376ad7579d64dbc89492a72bf8635dd1f5645509e11a14db449991",
+        "outputHash": "sha256:52a61a030d9a99fd63a37ec5ae502438733a389b90c583f28606f3d17eef2e4d",
         "at": "2026-04-26T00:10:04.000Z",
         "source": "hybrid"
       },
       {
         "id": "zg-hybrid-critic-002",
         "type": "critic",
-        "promptHash": "sha256:4ac61991e3719f267f8a73ca4bc5e849f0d3f1e14bad832e08cf06e3bbbae57f",
+        "promptHash": "sha256:e7e14279b7740e3a7a605b5a9449b7fd9b02aee1a634b6640282f660641c5215",
         "outputHash": "sha256:ab77f6ee37959571c3a80f4be8324dcfde9e85a625aa75bfa9bb5215c54acde3",
         "at": "2026-04-26T00:10:10.000Z",
         "source": "hybrid"
       },
       {
-        "id": "zg-live-analysis-95b970ef686e",
+        "id": "zg-live-analysis-95bb0f30184d",
         "type": "analysis",
         "promptHash": "sha256:f73f67b8ca9165a8c1aa957d3732e1dfe95f52e8ca1b5d2ac1248e433f3cdfb8",
-        "outputHash": "sha256:6a1e48b944f7802859571ab1ca5888c227398c134aa667583f12ef080e3f4cb8",
+        "outputHash": "sha256:3bd121aaf0db03f3c838b67f3aac34d0bde2cde27ef85eaecd4bbd762265e3a3",
         "at": "2026-04-26T00:20:04.000Z",
         "source": "live"
       },
       {
-        "id": "zg-live-critic-69794555dda4",
+        "id": "zg-live-critic-a83aa740043a",
         "type": "critic",
-        "promptHash": "sha256:75f2ea81ff2acbb7b1f949f566819e4cbed825b1848fd0b32c3c953010b056f5",
-        "outputHash": "sha256:f95c7d6a2a377e9cc946674a50c046a0cce53d2c6b1239feb89d737869344b0b",
+        "promptHash": "sha256:510b89f03cf1d932da52ba57efcf3a723b4d06454a5e5587eadca61a4da97fa9",
+        "outputHash": "sha256:84e490da252516a8bd0b848a18222470520c11c9023ae74dece4df59cf02b012",
         "at": "2026-04-26T00:20:10.000Z",
         "source": "live"
       }
@@ -842,15 +850,15 @@
         "tokenId": "1"
       },
       "intelligenceBundleRoot": "sha256:6289903e00f2e42448eb3cad30d322fcd4e1b3e3af54dd37f35a863a864f0bcd",
-      "memoryRoot": "sha256:d559e2a8427d70dce884ecea72ae7678effa79e0d8b62178405495be9c57e5e1",
-      "latestRunRoot": "sha256:61aeab5b75456fa20b010ddf61d5c7e8077641368085168aa446aaf62b13fafb",
+      "memoryRoot": "sha256:a2398bbb0b7b561c7fa891cf7a808f81991996cc1bce29b01dc0d6010ac11c72",
+      "latestRunRoot": "sha256:59f86560dcb00747fcb04368daeb8d0318f75ac4928180636db1e37e445362e9",
       "computeRunIds": [
         "zg-hybrid-analysis-001",
         "zg-hybrid-critic-001",
         "zg-hybrid-analysis-002",
         "zg-hybrid-critic-002",
-        "zg-live-analysis-95b970ef686e",
-        "zg-live-critic-69794555dda4"
+        "zg-live-analysis-95bb0f30184d",
+        "zg-live-critic-a83aa740043a"
       ]
     }
   },

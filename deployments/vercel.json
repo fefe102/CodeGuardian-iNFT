@@ -2,12 +2,12 @@
   "project": "proof-of-intelligence-explorer",
   "status": "ready",
   "url": "https://proof-of-intelligence-explorer.vercel.app",
-  "deploymentUrl": "https://proof-of-intelligence-explorer-3da8gbl9j-we-lans-projects.vercel.app",
-  "deploymentId": "dpl_74JEU6CHhb3PP7WQzXhkxGHA6r4h",
-  "inspectorUrl": "https://vercel.com/we-lans-projects/proof-of-intelligence-explorer/74JEU6CHhb3PP7WQzXhkxGHA6r4h",
+  "deploymentUrl": "https://proof-of-intelligence-explorer-4bv67j0cu-we-lans-projects.vercel.app",
+  "deploymentId": "dpl_95FXGmSmpuSfcYxM9eWJP5YbY6y6",
+  "inspectorUrl": "https://vercel.com/we-lans-projects/proof-of-intelligence-explorer/95FXGmSmpuSfcYxM9eWJP5YbY6y6",
   "mode": "hybrid",
   "liveWritesEnabled": false,
-  "deployedAt": "2026-05-03T02:52:11.000Z",
+  "deployedAt": "2026-05-03T03:21:00.000Z",
   "proofLayers": {
     "chain": "live",
     "storage": "live",
@@ -22,7 +22,7 @@
     "codeguardianTokenId": "1",
     "fakeagentTokenId": "2",
     "codeguardianPassportId": "0x01212ca92791787ccb99c454d3b59c5596f90882c892c7fca3e63294a159430c",
-    "codeguardianCertificateId": "3"
+    "codeguardianCertificateId": "4"
   },
   "safeToCommit": true,
   "notes": [
@@ -42,6 +42,8 @@
     "Latest production deployment adds Judge Mode, safe pasted-diff review, live 0G Storage root/tx metadata, and live 0G Compute records for the latest CodeGuardian run.",
     "Latest production deployment aligns public health metadata with CodeGuardian iNFT and AgentProof naming.",
     "Latest production deployment exposes recorded 0G Chain transaction hashes as ChainScan links on Judge Mode, Agent Console, Passport, and Certificate pages.",
-    "Latest production deployment fixes the public SVG badge route so the CodeGuardian iNFT badge reports Tier 6."
+    "Latest production deployment fixes the public SVG badge route so the CodeGuardian iNFT badge reports Tier 6.",
+    "Latest production deployment makes Run 003 coherent as an async side-effect audit, adds the matching patch diff to replay/console/proof JSON, refreshes live 0G Storage proof objects, and updates registry/certificate record 4.",
+    "Latest production deployment removes the stale public certificate-id override so hosted health and Judge Mode read certificate record 4 from committed deployment metadata."
   ]
 }

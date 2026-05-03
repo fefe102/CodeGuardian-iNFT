@@ -18,7 +18,7 @@ Live Galileo seed:
 - CodeGuardian iNFT: `0xa390c79f21a3b4f62f4797308f50f8ff9ea4f4c9`
 - CodeGuardian token ID: `1`
 - Registry: `0x90d7f68cbf2a860f7b2c54548095fcb72d61b9af`
-- Certificate record: `3`
+- Certificate record: `4`
 - FakeAgent control token ID: `2`
 
 The demo iNFT contract is ERC-7857-style and aligned with 0G Agentic ID proof semantics. It exposes manifest, intelligence, memory, latest run, usage, skill hash, authorized usage, and run certification semantics. It is not a marketplace.
@@ -47,12 +47,12 @@ The current CodeGuardian proof bundle has live 0G Storage records for all six al
 
 Current tx sequences:
 
-- manifest: `68674`
+- manifest: `76442`
 - encrypted intelligence: `68661`
-- memory: `68677`
-- latest run trace: `68678`
-- compute bundle: `68679`
-- certificate: `68681`
+- memory: `76446`
+- latest run trace: `76448`
+- compute bundle: `76449`
+- certificate: `76450`
 
 ## 0G Compute
 
@@ -61,7 +61,7 @@ CodeGuardian uses two compute-shaped records for each run:
 1. analysis run
 2. critic/self-review run
 
-The current compute evidence is hybrid by design: Runs 001-002 use deterministic records and Run 003 includes live 0G Compute analysis and critic calls. The adapter/interface is the same shape used by live 0G Compute scripts, and pages label the mixed compute layer as `hybrid`.
+The current compute evidence is hybrid by design: Runs 001-002 use deterministic records and Run 003 includes live 0G Compute analysis and critic calls. The compute bundle is uploaded as a live 0G Storage proof object. The adapter/interface is the same shape used by live 0G Compute scripts, and pages label the mixed compute layer as `hybrid`.
 
 ## Optional 0G DA
 

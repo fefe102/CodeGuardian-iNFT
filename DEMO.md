@@ -41,7 +41,7 @@ pnpm demo:export-proof
 
 - 0G Chain proof is live on Galileo.
 - 0G Storage proof objects are live uploaded and recorded with root hashes, tx hashes, and tx sequences.
-- 0G Compute is hybrid: Runs 001-002 use deterministic records and Run 003 includes live 0G Compute analysis and critic records.
+- 0G Compute is hybrid: Runs 001-002 use deterministic records, the compute bundle is live on 0G Storage, and Run 003 includes live 0G Compute analysis and critic records.
 - Admin actions are disabled unless `POI_ENABLE_LIVE_WRITES=true` and `POI_ADMIN_TOKEN` are configured server-side.
 - Live writes spend only 0G Galileo testnet funds and preflight chain ID, wallet address, and balance.
 
