@@ -2,7 +2,7 @@ import { badgeStatusForTier } from "@poi/sdk";
 import { parsePassportTarget, verifyPassportTarget } from "../../../../../lib/proof";
 
 export async function GET(
-  _request: Request,
+  request: Request,
   {
     params,
   }: {
@@ -18,7 +18,7 @@ export async function GET(
   let color = "#64748b";
   try {
     const report = await verifyPassportTarget(
-      parsePassportTarget(normalizeBadgeParams(await params)),
+      parsePassportTarget(normalizeBadgeParams(await params, request.url)),
     );
     label = badgeStatusForTier(report.tier);
     color =
@@ -55,11 +55,13 @@ function normalizeBadgeParams(params: {
   contract?: string;
   tokenId?: string;
   "tokenId.svg"?: string;
-}) {
-  const rawTokenId = params.tokenId ?? params["tokenId.svg"] ?? "";
+}, requestUrl: string) {
+  const pathParts = new URL(requestUrl).pathname.split("/").filter(Boolean);
+  const rawTokenId =
+    params.tokenId ?? params["tokenId.svg"] ?? pathParts.at(-1) ?? "";
   return {
-    chainId: params.chainId,
-    contract: params.contract,
+    chainId: params.chainId ?? pathParts.at(-3),
+    contract: params.contract ?? pathParts.at(-2),
     tokenId: rawTokenId.endsWith(".svg")
       ? rawTokenId.slice(0, -".svg".length)
       : rawTokenId,

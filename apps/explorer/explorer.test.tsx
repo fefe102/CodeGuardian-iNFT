@@ -230,6 +230,21 @@ describe("public API and badge routes", () => {
     expect(svg).toContain("Proof of Intelligence");
     expect(svg).toContain("Tier 6");
   });
+
+  it("badge SVG endpoint falls back to the request pathname", async () => {
+    const target = seededCodeGuardianTarget();
+    const response = await BadgeGET(
+      new Request(
+        `https://example.test/badge/${target.chainId}/${target.contract}/${target.tokenId}.svg`,
+      ) as never,
+      {
+        params: Promise.resolve({}),
+      },
+    );
+    const svg = await response.text();
+    expect(svg).toContain("Proof of Intelligence");
+    expect(svg).toContain("Tier 6");
+  });
 });
 
 describe("admin route security", () => {
